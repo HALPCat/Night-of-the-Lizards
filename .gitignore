@@ -1,0 +1,5 @@
+Night of the Lizards/Library/
+Night of the Lizards/Temp/
+*.sln
+Night of the Lizards/.vs/
+*.csproj
