@@ -41,3 +41,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Dungeon background
+    uniqueID: 3912236245
+    locked: 0
+  - name: Items
+    uniqueID: 2555701331
+    locked: 0
+  - name: Characters
+    uniqueID: 4157478019
+    locked: 0
+  - name: Dungeon foreground
+    uniqueID: 219746027
+    locked: 0
