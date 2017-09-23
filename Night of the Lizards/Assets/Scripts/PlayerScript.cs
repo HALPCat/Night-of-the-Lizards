@@ -2,16 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayeScript : MonoBehaviour {
+public class PlayerScript : MonoBehaviour {
     //For checking what's on the map
     public GridHandler gridHandler;
 
     //This is for movement
     float timer = 0;
 
-    //Poisition variables
+    //Position variables
     int positionX;
     int positionY;
+
+    public int PositionX { get { return positionX; } }
+    public int PositionY { get { return positionY; } }
 
     // Use this for initialization
     void Start () {

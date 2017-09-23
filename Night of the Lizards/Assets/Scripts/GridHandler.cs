@@ -6,9 +6,9 @@ public class GridHandler : MonoBehaviour {
 
     //Width and height of the dungeon
     [SerializeField]
-    private int dungeonWidth = 10;
+    private int dungeonWidth;
     [SerializeField]
-    private int dungeonHeight = 10;
+    private int dungeonHeight;
 
     //The grid that is inhabited by tiles
     private GameObject[,] grid;
