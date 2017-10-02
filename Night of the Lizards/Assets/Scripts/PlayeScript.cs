@@ -15,24 +15,19 @@ namespace LizardNight
 
 
 
-        // Use this for initialization
-        void Start()
-        {
-
-        }
+      
 
         // Update is called once per frame
-        void Update()
+        protected override void Update()
         {
             //doesn't act if not it's turn
             if (!GameMaster.GM.playersTurn)
                 return;
-            
-            //Lets keep positions updated
-            positionX = (int)transform.position.x;
-            positionY = (int)transform.position.y;
+
+          
                        
             Move();
+            
             
         }
 

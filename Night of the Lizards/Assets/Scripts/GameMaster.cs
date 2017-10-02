@@ -72,6 +72,7 @@ namespace LizardNight
 
             for (int i = 0; i < enemies.Count; i++)
             {
+                if (!enemies[i].stationary)
                 enemies[i].Movement();
 
                 yield return new WaitForSeconds(turnTimer);

@@ -16,24 +16,29 @@ namespace LizardNight
         //player position (if triggered)
         PlayeScript target;
         int targetY, targetX;
+        [SerializeField]
+        protected bool _stationary;
         
+        public bool stationary 
+        {
+            get {return _stationary; }
+        }
 
         // Use this for initialization
         protected override void Start()
         {
             //adds enemy to the game master list
             GameMaster.GM.AddEnemy(this);
+           
 
             base.Start();
             
         }
 
         // Update is called once per frame
-        void Update()
+       protected override void Update()
         {
-            //updating position
-            positionX = (int)transform.position.x;
-            positionY = (int)transform.position.y;
+            
 
           
         }
@@ -57,53 +62,55 @@ namespace LizardNight
         }
         public void Movement()
         {
-            if (!triggered)
-            {
-                //if not triggered, will move randomly
-                int dir = UnityEngine.Random.Range(1, 5);
-
-                switch (dir)
+            
+                if (!triggered)
                 {
-                    case 1:
-                        moveHorizontal(1);
-                        break;
-                    case 2:
-                        moveHorizontal(-1);
-                        break;
-                    case 3:
-                        moveVertical(1);
-                        break;
-                    case 4:
-                        moveVertical(-1);
-                        break;
+                    //if not triggered, will move randomly
+                    int dir = UnityEngine.Random.Range(1, 5);
 
+                    switch (dir)
+                    {
+                        case 1:
+                            moveHorizontal(1);
+                            break;
+                        case 2:
+                            moveHorizontal(-1);
+                            break;
+                        case 3:
+                            moveVertical(1);
+                            break;
+                        case 4:
+                            moveVertical(-1);
+                            break;
+
+                    }
                 }
-            }
-
-            else
-            {
-                if (Mathf.Abs (target.GetX - transform.position.x) < float.Epsilon)
-                {
-                    targetY = target.GetY > transform.position.y ? 1 : -1;
-                    moveVertical(targetY);
-                }
-
+                //if triggered by player will pursue
                 else
                 {
-                    targetX = target.GetX > transform.position.x ? 1 : -1;
-                    moveHorizontal(targetX);
+                    if (Mathf.Abs(target.GetX - transform.position.x) < float.Epsilon)
+                    {
+                        targetY = target.GetY > transform.position.y ? 1 : -1;
+                        moveVertical(targetY);
+                    }
+
+                    else
+                    {
+                        targetX = target.GetX > transform.position.x ? 1 : -1;
+                        moveHorizontal(targetX);
+                    }
+
                 }
-
             }
-
+        }
                     
 
 
             
            
-        }
+        
 
-        //if triggered by player will pursue
+        
      
     }
-}
+
