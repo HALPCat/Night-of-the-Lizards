@@ -58,8 +58,9 @@ MonoBehaviour:
   - {fileID: 21300004, guid: a06336c3289cf5741af465589cfd32df, type: 3}
   - {fileID: 21300006, guid: a06336c3289cf5741af465589cfd32df, type: 3}
   - {fileID: 21300008, guid: a06336c3289cf5741af465589cfd32df, type: 3}
+  - {fileID: 21300012, guid: a06336c3289cf5741af465589cfd32df, type: 3}
+  - {fileID: 21300020, guid: a06336c3289cf5741af465589cfd32df, type: 3}
   - {fileID: 21300010, guid: a06336c3289cf5741af465589cfd32df, type: 3}
-  - {fileID: 21300018, guid: a06336c3289cf5741af465589cfd32df, type: 3}
 --- !u!212 &212546500369732772
 SpriteRenderer:
   m_ObjectHideFlags: 1

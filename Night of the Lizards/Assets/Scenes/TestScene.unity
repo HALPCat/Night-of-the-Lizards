@@ -217,3 +217,4 @@ MonoBehaviour:
   dungeonTiles:
   - {fileID: 1588012664291072, guid: 630f07142f4b87840806e4c944a43967, type: 2}
   - {fileID: 1027556077598850, guid: 9249c3ecafe7eec47ac82c78c441a8e0, type: 2}
+  tunnelLength: 40

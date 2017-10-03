@@ -68,23 +68,29 @@ public class WallTopScript : MonoBehaviour {
     }
 
     void updateSprite() {
-        if (north && east) {
+        if (north & east & !south & !west) {
             this.GetComponent<SpriteRenderer>().sprite = topPieces[4];
         }
-        else if (east && south) {
+        else if (east & south & !north & !west) {
             this.GetComponent<SpriteRenderer>().sprite = topPieces[1];
         }
-        else if (south && west) {
+        else if (south & west & !north & !east) {
             this.GetComponent<SpriteRenderer>().sprite = topPieces[3];
         }
-        else if (north && west) {
+        else if (north & west & !east & !south) {
             this.GetComponent<SpriteRenderer>().sprite = topPieces[6];
         }
-        else if (north && south) {
+        else if (north & south & !east & !west) {
             this.GetComponent<SpriteRenderer>().sprite = topPieces[5];
         }
-        else if (east && west) {
+        else if (east & west & !north & !south) {
             this.GetComponent<SpriteRenderer>().sprite = topPieces[2];
+        }
+        else if (!north & !east & !south & !west) {
+            this.GetComponent<SpriteRenderer>().sprite = topPieces[0];
+        }
+        else {
+            this.GetComponent<SpriteRenderer>().sprite = topPieces[7];
         }
     }
 }
