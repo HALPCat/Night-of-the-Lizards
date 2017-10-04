@@ -86,7 +86,7 @@ public class PlayerScript : MonoBehaviour {
 
     void moveVertical(int tiles) {
         //Move to new position if it is not a wall
-        if (!gridHandler.getGrid(positionX, positionY + tiles).name.Equals("Wall")) {
+        if (!gridHandler.getGrid(positionX, positionY + tiles).name.Equals("Wall(Clone)")) {
             transform.Translate(new Vector3(0, tiles));
         } else {
             Debug.Log("Couldn't move");
@@ -94,7 +94,7 @@ public class PlayerScript : MonoBehaviour {
     }
     void moveHorizontal(int tiles) {
         //Move to new position if it is not a wall
-        if (!gridHandler.getGrid(positionX + tiles, positionY).name.Equals("Wall")) {
+        if (!gridHandler.getGrid(positionX + tiles, positionY).name.Equals("Wall(Clone)")) {
             transform.Translate(new Vector3(tiles, 0));
         }else {
             Debug.Log("Couldn't move");

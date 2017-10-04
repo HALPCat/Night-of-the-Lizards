@@ -117,11 +117,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4616942821582496, guid: 8aab8f343b6bc8545a56c210d5003f51, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 8
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4616942821582496, guid: 8aab8f343b6bc8545a56c210d5003f51, type: 2}
       propertyPath: m_LocalPosition.y
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4616942821582496, guid: 8aab8f343b6bc8545a56c210d5003f51, type: 2}
       propertyPath: m_LocalPosition.z
@@ -200,8 +200,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43ecd7ff97551324e9729826ffd81f02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dungeonWidth: 17
-  dungeonHeight: 9
+  dungeonWidth: 32
+  dungeonHeight: 32
 --- !u!114 &1969715891
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -214,7 +214,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridHandler: {fileID: 1969715890}
-  dungeonTiles:
-  - {fileID: 1588012664291072, guid: 630f07142f4b87840806e4c944a43967, type: 2}
-  - {fileID: 1027556077598850, guid: 9249c3ecafe7eec47ac82c78c441a8e0, type: 2}
-  tunnelLength: 40
+  tunnelLength: 400

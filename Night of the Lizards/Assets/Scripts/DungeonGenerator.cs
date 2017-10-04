@@ -4,11 +4,14 @@ using UnityEngine;
 
 public class DungeonGenerator : MonoBehaviour {
     public GridHandler gridHandler;
-    public GameObject[] dungeonTiles;
     [SerializeField]
     int tunnelLength = 20;
+    GameObject player;
 
     void Awake() {
+        fillGrid(Resources.Load("Wall") as GameObject);
+        randomTunneler(tunnelLength);
+        PlaceStairs();
     }
 
     //OnEnable is called after Awake but before Start
@@ -16,11 +19,24 @@ public class DungeonGenerator : MonoBehaviour {
     //setGrid only works in OnEnable because it's in between the two
     //this is retarded
 	void OnEnable () {
-        //gridHandler.setGrid(0, 0, Resources.Load("Floor") as GameObject);
-        fillGrid(Resources.Load("Wall") as GameObject);
-        randomTunneler(tunnelLength);
+        
     }
 
+    void Start() {
+        player = GameObject.Find("Player");
+    }
+
+    void Update () {
+        if (Input.GetKeyDown(KeyCode.Return)) {
+            if (gridHandler.getGrid((int)player.transform.position.x, (int)player.transform.position.y).name.Equals("StairsDown(Clone)")) {
+                gridHandler.destroyDungeon();
+                fillGrid(Resources.Load("Wall") as GameObject);
+                randomTunneler(tunnelLength);
+                PlaceStairs();
+                gridHandler.buildDungeon();
+            }
+        }
+    }
     void fillGrid(GameObject tileType) {
         for (int i = 0; i < gridHandler.DungeonWidth; i++) {
             for (int j = 0; j < gridHandler.DungeonHeight; j++) {
@@ -83,6 +99,30 @@ public class DungeonGenerator : MonoBehaviour {
         }
     }
 
-    
+    void PlaceStairs() {
+        int randX;
+        int randY;
+        bool downStairPlaced = false;
+        bool upStairPlaced = false;
 
+        while (!downStairPlaced) {
+            randX = Random.Range(0, gridHandler.DungeonWidth);
+            randY = Random.Range(0, gridHandler.DungeonHeight);
+
+            if (gridHandler.getGrid(randX, randY) == Resources.Load("Floor")) {
+                gridHandler.setGrid(randX, randY, Resources.Load("StairsDown") as GameObject);
+                downStairPlaced = true;
+            }
+        }
+
+        while (!upStairPlaced) {
+            randX = Random.Range(0, gridHandler.DungeonWidth);
+            randY = Random.Range(0, gridHandler.DungeonHeight);
+
+            if (gridHandler.getGrid(randX, randY) == Resources.Load("Floor")) {
+                gridHandler.setGrid(randX, randY, Resources.Load("StairsUp") as GameObject);
+                upStairPlaced = true;
+            }
+        }
+    }
 }

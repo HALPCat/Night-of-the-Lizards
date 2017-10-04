@@ -9,7 +9,7 @@ public class GridHandler : MonoBehaviour {
     private int dungeonWidth;
     [SerializeField]
     private int dungeonHeight;
-
+    GameObject stairsDown;
     //The grid that is inhabited by tiles
     private GameObject[,] grid;
 
@@ -29,10 +29,12 @@ public class GridHandler : MonoBehaviour {
         //Set the grid to be the size of given width and height
         grid = new GameObject[dungeonWidth, dungeonHeight];
         //Fills the grid with tiles
-        fillGrid();
+        //fillGrid();
+
     }
 
     void Start() {
+        //buildDungeon only works in Start?
         buildDungeon();
     }
     
@@ -53,11 +55,21 @@ public class GridHandler : MonoBehaviour {
         }
     }
     
-    void buildDungeon() {
+    public void buildDungeon() {
         for (int i = 0; i < dungeonWidth; i++) {
             for (int j = 0; j < dungeonHeight; j++) {
                 //Create a tile in the grid in corresponding coordinates
-                Instantiate(grid[i, j], new Vector3(transform.position.x + i, transform.position.y + j), Quaternion.identity);
+                grid[i,j] = (GameObject) Instantiate(grid[i, j], new Vector3(transform.position.x + i, transform.position.y + j), Quaternion.identity);
+            }
+        }
+    }
+
+    public void destroyDungeon() {
+        GameObject currentTile;
+        for (int i = 0; i < dungeonWidth; i++) {
+            for (int j = 0; j < dungeonHeight; j++) {
+                currentTile = grid[i, j];
+                Destroy(currentTile);
             }
         }
     }

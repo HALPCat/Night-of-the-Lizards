@@ -5,7 +5,8 @@ using UnityEngine;
 public class WallScript : MonoBehaviour {
 
     void Awake() {
-        Instantiate(Resources.Load("WallTopPiece"), new Vector3(transform.position.x, transform.position.y + 1), Quaternion.identity);
+        GameObject topPiece = (GameObject) Instantiate(Resources.Load("WallTopPiece"), new Vector3(transform.position.x, transform.position.y + 1), Quaternion.identity);
+        topPiece.transform.parent = this.transform;
     }
 
 	// Use this for initialization
