@@ -3,3 +3,5 @@ Night of the Lizards/Temp/
 *.sln
 Night of the Lizards/.vs/
 *.csproj
+*.orig
+*.meta
