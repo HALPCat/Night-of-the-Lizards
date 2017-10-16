@@ -32,12 +32,14 @@ namespace LizardNight {
         public void teleportToBeginning() {
             GameObject stairsUp;
             stairsUp = GameObject.Find("StairsUp(Clone)");
-            transform.position = new Vector3(stairsUp.transform.position.x, stairsUp.transform.position.y, 0);
-            Debug.Log("Player teleported to top stairs from StairsUpScript");
-
-            positionX = (int)transform.position.x;
-            positionY = (int)transform.position.y;
-            Debug.Log("Player X and Y updated");
+            if(stairsUp == null) {
+                Debug.LogError("PlayerScript couldn't find StairsUp(Clone)!");
+            } else {
+                transform.position = new Vector3(stairsUp.transform.position.x, stairsUp.transform.position.y, 0);
+                positionX = (int)transform.position.x;
+                positionY = (int)transform.position.y;
+                Debug.Log("Player teleported to top stairs from StairsUpScript, Player X and Y updated");
+            }
         }
 
         protected override void Move() {

@@ -13,13 +13,13 @@ namespace LizardNight {
         private int dungeonWidth = 10;
         [SerializeField]
         private int dungeonHeight = 10;
-        GameObject stairsDown;
-        //The grid that is inhabited by tiles
-        private GameObject[,] grid;
+
+        //Grid for dungeon tiles
+        private GameObject[,] tileGrid;
         //characters grid
         private GameObject[,] charGrid;
 
-        //The dungeon generator that this grid uses
+        //The dungeon generator that this grid handler uses for building dungeons
         [SerializeField]
         private DungeonGenerator dungeonGenerator;
 
@@ -36,86 +36,53 @@ namespace LizardNight {
         int gridSizeX, gridSizeY;
 
         //I have no idea how array getters and setters work so I'll just make bootleg methods
-        public GameObject getGrid(int x, int y) {
-            return grid[x, y];
+        public GameObject getTileGrid(int x, int y) {
+            return tileGrid[x, y];
         }
         public GameObject getCharGrid(int x, int y) {
             return charGrid[x, y];
         }
-        public void setGrid(int x, int y, GameObject gameObject) {
-            grid[x, y] = gameObject;
+        public void setTileGrid(int x, int y, GameObject gameObject) {
+            tileGrid[x, y] = gameObject;
         }
         public void setCharGrid(int x, int y, GameObject gameObject) {
             charGrid[x, y] = gameObject;
         }
 
         void Awake() {
-            //Assigning dungeonGenerator an instance of DungeonGenerator
+            //Assigning dungeonGenerator a DungeonGenerator
             dungeonGenerator = GetComponent<DungeonGenerator>();
             if(dungeonGenerator == null) {
                 Debug.LogError("GridHandler couldn't find an instance of DungeonGenerator!");
             }
 
 
-            //Set the grid to be the size of given width and height
-            grid = new GameObject[dungeonWidth, dungeonHeight];
+            //Set the tileGrid and charGrid to be the given size
+            tileGrid = new GameObject[dungeonWidth, dungeonHeight];
             charGrid = new GameObject[dungeonWidth, dungeonHeight];
-            //Fills the grid with tiles
-            dungeonGenerator.FillGrid(grid, Resources.Load("Wall") as GameObject);
-            dungeonGenerator.RandomTunneler(grid, dungeonGenerator.tunnelLength);
-            dungeonGenerator.PlaceStairs(grid);
-            //fillGrid();
-            fillCharGrid();
+
+
+            // - - - - - - - - - - Begin dungeon generation - - - - - - - - - -
+            dungeonGenerator.FillGrid(tileGrid, Resources.Load("Wall") as GameObject);  //Fills the entire floor with walls
+            dungeonGenerator.RandomTunneler(tileGrid, dungeonGenerator.tunnelLength);   //Creates a tunnel on the floor
+            dungeonGenerator.PlaceStairs(tileGrid);                                     //Places stairs on the floor
+            dungeonGenerator.BuildDungeon(tileGrid);                                    //Instantiates the gameobjects in tileGrid
+            // - - - - - - - - - - End dungeon generation - - - - - - - - - -
+
+
             CreateNodeGrid();
-            buildDungeon();
+            fillCharGrid();
         }
 
         void Start() {
-        }
 
-        /* obsolete
-        void fillGrid() {
-            //For every slot in width
-            for (int i = 0; i < dungeonWidth; i++) {
-                //For every slot in height
-                for (int j = 0; j < dungeonHeight; j++) {
-                    //If current tile is a border tile
-                    if (i == 0 || j == 0 || i == dungeonWidth - 1 || j == dungeonHeight - 1) {
-                        //Occupy this grid slot with a wall
-                        grid[i, j] = Resources.Load("Wall") as GameObject;
-                    } else {
-                        //Occupy this grid slot with a floor
-                        grid[i, j] = Resources.Load("Floor") as GameObject;
-                    }
-                }
-            }
         }
-        */
 
         //starts the char grid as null
         void fillCharGrid() {
             for (int i = 0; i < dungeonWidth; i++) {
                 for (int j = 0; j < dungeonHeight; j++) {
                     charGrid[i, j] = null;
-                }
-            }
-        }
-
-        public void buildDungeon() {
-            for (int i = 0; i < dungeonWidth; i++) {
-                for (int j = 0; j < dungeonHeight; j++) {
-                    //Create a tile in the grid in corresponding coordinates
-                    grid[i, j] = (GameObject)Instantiate(grid[i, j], new Vector3(transform.position.x + i, transform.position.y + j), Quaternion.identity);
-                }
-            }
-        }
-
-        public void destroyDungeon() {
-            GameObject currentTile;
-            for (int i = 0; i < dungeonWidth; i++) {
-                for (int j = 0; j < dungeonHeight; j++) {
-                    currentTile = grid[i, j];
-                    Destroy(currentTile);
                 }
             }
         }
@@ -146,7 +113,7 @@ namespace LizardNight {
             for (int x = 0; x < dungeonWidth; x++) {
                 for (int y = 0; y < DungeonHeight; y++) {
                     //Debug.Log("Checking " + x + y);
-                    if (grid[x, y].name.Equals("Wall")) {
+                    if (tileGrid[x, y].name.Equals("Wall(Clone)")) {
                         nodeGrid[x, y] = new Node(false, new Vector2(x, y), x, y);
                         //Debug.Log("Wall node created");
 

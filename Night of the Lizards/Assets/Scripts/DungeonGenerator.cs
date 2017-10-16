@@ -12,15 +12,9 @@ namespace LizardNight {
         GameObject player;
 
         void Awake() {
-            //FillGrid(Resources.Load("Wall") as GameObject);
-            //RandomTunneler(tunnelLength);
-            //PlaceStairs();
-            //gridHandler.CreateNodeGrid();
+
         }
 
-
-        //OnEnable is called after Awake but before Start
-        //fillDungeon is called in Awake and buildDungeon is called in Start
         void OnEnable() {
 
         }
@@ -32,6 +26,7 @@ namespace LizardNight {
         }
 
         void Update() {
+            /* Good old spaghetti and meat balls
             if (Input.GetKeyDown(KeyCode.Return)) {
                 if (gridHandler.getGrid((int)player.transform.position.x, (int)player.transform.position.y).name.Equals("StairsDown(Clone)")) {
                     gridHandler.destroyDungeon();
@@ -39,6 +34,30 @@ namespace LizardNight {
                     //RandomTunneler(tunnelLength);
                     //PlaceStairs();
                     //gridHandler.buildDungeon();
+                }
+            }
+            */
+        }
+
+        public void BuildDungeon(GameObject[,] grid) {
+            int dungeonWidth = grid.GetLength(0);
+            int dungeonHeight = grid.GetLength(1);
+            for (int i = 0; i < dungeonWidth; i++) {
+                for (int j = 0; j < dungeonHeight; j++) {
+                    //Create a tile in the grid in corresponding coordinates
+                    grid[i, j] = (GameObject)Instantiate(grid[i, j], new Vector3(transform.position.x + i, transform.position.y + j), Quaternion.identity);
+                }
+            }
+        }
+
+        public void DestroyDungeon(GameObject[,] grid) {
+            int dungeonWidth = grid.GetLength(0);
+            int dungeonHeight = grid.GetLength(1);
+            GameObject currentTile;
+            for (int i = 0; i < dungeonWidth; i++) {
+                for (int j = 0; j < dungeonHeight; j++) {
+                    currentTile = grid[i, j];
+                    Destroy(currentTile);
                 }
             }
         }
@@ -49,7 +68,7 @@ namespace LizardNight {
 
             for (int i = 0; i < dungeonWidth; i++) {
                 for (int j = 0; j < dungeonHeight; j++) {
-                    gridHandler.setGrid(i, j, tileType);
+                    grid[i, j] = tileType;
                 }
             }
         }
@@ -139,5 +158,24 @@ namespace LizardNight {
                 }
             }
         }
+
+        /* obsolete trash from GridHandler, look into this later
+        void fillGrid() {
+            //For every slot in width
+            for (int i = 0; i < dungeonWidth; i++) {
+                //For every slot in height
+                for (int j = 0; j < dungeonHeight; j++) {
+                    //If current tile is a border tile
+                    if (i == 0 || j == 0 || i == dungeonWidth - 1 || j == dungeonHeight - 1) {
+                        //Occupy this grid slot with a wall
+                        grid[i, j] = Resources.Load("Wall") as GameObject;
+                    } else {
+                        //Occupy this grid slot with a floor
+                        grid[i, j] = Resources.Load("Floor") as GameObject;
+                    }
+                }
+            }
+        }
+        */
     }
 }

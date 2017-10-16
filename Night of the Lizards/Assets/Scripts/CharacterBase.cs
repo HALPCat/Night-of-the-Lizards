@@ -30,9 +30,6 @@ namespace LizardNight
         // Use this for initialization
         protected virtual void Start()
         {
-            if (gameObject.name.Equals("Player")) {
-                Debug.Log("Player spotted");
-            }
             positionX = (int)transform.position.x;
             positionY = (int)transform.position.y;
             Debug.Log("character X and Y set to actual X and Y from CharacterBase");

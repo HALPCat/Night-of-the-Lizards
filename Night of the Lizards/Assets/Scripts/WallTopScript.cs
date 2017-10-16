@@ -45,7 +45,7 @@ namespace LizardNight {
         void checkSurroundings() {
             //wallY at the top row always equals dungeonHeight-1 because indexing starts at 0..
             if (wallY < gridHandler.DungeonHeight - 1) {
-                if (gridHandler.getGrid(wallX, wallY + 1).name.Equals("Wall(Clone)")) {
+                if (gridHandler.getTileGrid(wallX, wallY + 1).name.Equals("Wall(Clone)")) {
                     north = true;
                 }
             }
