@@ -12,9 +12,11 @@ namespace LizardNight {
         int wallY;
 
         bool north = false;
+        /* for directional pieces
         bool east = false;
         bool south = false;
         bool west = false;
+        */
 
         void Awake() {
             gridHandler = FindObjectOfType(typeof(GridHandler)) as GridHandler;
@@ -37,13 +39,7 @@ namespace LizardNight {
 
         // Update is called once per frame
         void Update() {
-            /*
-            if(playerScript.PositionY < wallY+1) {
-                this.GetComponent<SpriteRenderer>().sortingLayerName = "Dungeon background";
-            }else {
-                this.GetComponent<SpriteRenderer>().sortingLayerName = "Dungeon foreground";
-            }
-            */
+
         }
 
         void checkSurroundings() {
@@ -53,6 +49,7 @@ namespace LizardNight {
                     north = true;
                 }
             }
+            /* for directional pieces
             if (wallX < gridHandler.DungeonWidth - 1) {
                 if (gridHandler.getGrid(wallX + 1, wallY).name.Equals("Wall(Clone)")) {
                     east = true;
@@ -68,6 +65,7 @@ namespace LizardNight {
                     west = true;
                 }
             }
+            */
         }
 
         void updateSprite() {

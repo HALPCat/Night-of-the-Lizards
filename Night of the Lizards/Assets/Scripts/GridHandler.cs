@@ -19,6 +19,10 @@ namespace LizardNight {
         //characters grid
         private GameObject[,] charGrid;
 
+        //The dungeon generator that this grid uses
+        [SerializeField]
+        private DungeonGenerator dungeonGenerator;
+
         public int DungeonWidth { get { return dungeonWidth; } }
         public int DungeonHeight { get { return dungeonHeight; } }
 
@@ -46,19 +50,30 @@ namespace LizardNight {
         }
 
         void Awake() {
+            //Assigning dungeonGenerator an instance of DungeonGenerator
+            dungeonGenerator = GetComponent<DungeonGenerator>();
+            if(dungeonGenerator == null) {
+                Debug.LogError("GridHandler couldn't find an instance of DungeonGenerator!");
+            }
+
+
             //Set the grid to be the size of given width and height
             grid = new GameObject[dungeonWidth, dungeonHeight];
             charGrid = new GameObject[dungeonWidth, dungeonHeight];
             //Fills the grid with tiles
-            fillGrid();
+            dungeonGenerator.FillGrid(grid, Resources.Load("Wall") as GameObject);
+            dungeonGenerator.RandomTunneler(grid, dungeonGenerator.tunnelLength);
+            dungeonGenerator.PlaceStairs(grid);
+            //fillGrid();
             fillCharGrid();
-            //CreateNodeGrid();
-        }
-
-        void Start() {
+            CreateNodeGrid();
             buildDungeon();
         }
 
+        void Start() {
+        }
+
+        /* obsolete
         void fillGrid() {
             //For every slot in width
             for (int i = 0; i < dungeonWidth; i++) {
@@ -75,6 +90,7 @@ namespace LizardNight {
                 }
             }
         }
+        */
 
         //starts the char grid as null
         void fillCharGrid() {

@@ -8,14 +8,14 @@ namespace LizardNight {
     public class DungeonGenerator : MonoBehaviour {
         public GridHandler gridHandler;
         [SerializeField]
-        int tunnelLength = 20;
+        public int tunnelLength = 20;
         GameObject player;
 
         void Awake() {
-            fillGrid(Resources.Load("Wall") as GameObject);
-            randomTunneler(tunnelLength);
-            PlaceStairs();
-            gridHandler.CreateNodeGrid();
+            //FillGrid(Resources.Load("Wall") as GameObject);
+            //RandomTunneler(tunnelLength);
+            //PlaceStairs();
+            //gridHandler.CreateNodeGrid();
         }
 
 
@@ -35,28 +35,34 @@ namespace LizardNight {
             if (Input.GetKeyDown(KeyCode.Return)) {
                 if (gridHandler.getGrid((int)player.transform.position.x, (int)player.transform.position.y).name.Equals("StairsDown(Clone)")) {
                     gridHandler.destroyDungeon();
-                    fillGrid(Resources.Load("Wall") as GameObject);
-                    randomTunneler(tunnelLength);
-                    PlaceStairs();
-                    gridHandler.buildDungeon();
+                    //FillGrid(Resources.Load("Wall") as GameObject);
+                    //RandomTunneler(tunnelLength);
+                    //PlaceStairs();
+                    //gridHandler.buildDungeon();
                 }
             }
         }
 
-        void fillGrid(GameObject tileType) {
-            for (int i = 0; i < gridHandler.DungeonWidth; i++) {
-                for (int j = 0; j < gridHandler.DungeonHeight; j++) {
+        public void FillGrid(GameObject[,] grid, GameObject tileType) {
+            int dungeonWidth = grid.GetLength(0);
+            int dungeonHeight = grid.GetLength(1);
+
+            for (int i = 0; i < dungeonWidth; i++) {
+                for (int j = 0; j < dungeonHeight; j++) {
                     gridHandler.setGrid(i, j, tileType);
                 }
             }
         }
 
-        void randomTunneler(int tunnelLength) {
-            int middleX = Mathf.RoundToInt(gridHandler.DungeonWidth / 2);
-            int middleY = Mathf.RoundToInt(gridHandler.DungeonHeight / 2);
+        public void RandomTunneler(GameObject[,] grid, int tunnelLength) {
+            int dungeonWidth = grid.GetLength(0);
+            int dungeonHeight = grid.GetLength(1);
+
+            int middleX = Mathf.RoundToInt(dungeonWidth / 2);
+            int middleY = Mathf.RoundToInt(dungeonHeight / 2);
             int currentX = middleX;
             int currentY = middleY;
-            gridHandler.setGrid(middleX, middleY, Resources.Load("Floor") as GameObject);
+            grid[middleX, middleY] = Resources.Load("Floor") as GameObject;
             for (int i = 0; i < tunnelLength; i++) {
                 bool validMove = false;
                 int attempts = 0;
@@ -67,12 +73,12 @@ namespace LizardNight {
 
                     if (randDirection == 0) {
                         currentY++;
-                        if (currentY == gridHandler.DungeonHeight - 1) {
+                        if (currentY == dungeonHeight - 1) {
                             currentY--;
                         }
                     } else if (randDirection == 1) {
                         currentX++;
-                        if (currentX == gridHandler.DungeonWidth - 1) {
+                        if (currentX == dungeonWidth - 1) {
                             currentX--;
                         }
                     } else if (randDirection == 2) {
@@ -87,7 +93,7 @@ namespace LizardNight {
                         }
                     }
 
-                    if (gridHandler.getGrid(currentX, currentY) == Resources.Load("Wall")) {
+                    if (grid[currentX, currentY] == Resources.Load("Wall")) {
                         validMove = true;
                         attempts = 0;
                     } else {
@@ -100,33 +106,35 @@ namespace LizardNight {
                     }
 
                 }
-
-                gridHandler.setGrid(currentX, currentY, Resources.Load("Floor") as GameObject);
+                grid[currentX, currentY] = Resources.Load("Floor") as GameObject;
             }
         }
 
-        void PlaceStairs() {
+        public void PlaceStairs(GameObject[,] grid) {
+            int dungeonWidth = grid.GetLength(0);
+            int dungeonHeight = grid.GetLength(1);
+
             int randX;
             int randY;
             bool downStairPlaced = false;
             bool upStairPlaced = false;
 
             while (!downStairPlaced) {
-                randX = Random.Range(0, gridHandler.DungeonWidth);
-                randY = Random.Range(0, gridHandler.DungeonHeight);
+                randX = Random.Range(0, dungeonWidth);
+                randY = Random.Range(0, dungeonHeight);
 
-                if (gridHandler.getGrid(randX, randY) == Resources.Load("Floor")) {
-                    gridHandler.setGrid(randX, randY, Resources.Load("StairsDown") as GameObject);
+                if (grid[randX, randY] == Resources.Load("Floor")) {
+                    grid[randX, randY] = Resources.Load("StairsDown") as GameObject;
                     downStairPlaced = true;
                 }
             }
 
             while (!upStairPlaced) {
-                randX = Random.Range(0, gridHandler.DungeonWidth);
-                randY = Random.Range(0, gridHandler.DungeonHeight);
+                randX = Random.Range(0, dungeonWidth);
+                randY = Random.Range(0, dungeonHeight);
 
-                if (gridHandler.getGrid(randX, randY) == Resources.Load("Floor")) {
-                    gridHandler.setGrid(randX, randY, Resources.Load("StairsUp") as GameObject);
+                if (grid[randX, randY] == Resources.Load("Floor")) {
+                    grid[randX, randY] = Resources.Load("StairsUp") as GameObject;
                     upStairPlaced = true;
                 }
             }
