@@ -56,6 +56,12 @@ namespace LizardNight
             enemies.Add(enemy);
         }
 
+        //remove the enemies from the list
+        public void RemoveEnemy(BasicEnemy enemy)
+        {
+            enemies.Remove(enemy);
+        }
+
         //coroutine for enemies turn
         IEnumerator EnemyTurn()
         {

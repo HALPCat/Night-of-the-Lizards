@@ -51,7 +51,10 @@ namespace LizardNight {
 
         void Awake() {
             //Assigning dungeonGenerator a DungeonGenerator
-            dungeonGenerator = GetComponent<DungeonGenerator>();
+            if (dungeonGenerator == null) {
+                dungeonGenerator = GetComponent<DungeonGenerator>();
+                Debug.Log("GridHandler has no dungeonGenerator assigned in Unity UI, getting component");
+            }
             if(dungeonGenerator == null) {
                 Debug.LogError("GridHandler couldn't find an instance of DungeonGenerator!");
             }

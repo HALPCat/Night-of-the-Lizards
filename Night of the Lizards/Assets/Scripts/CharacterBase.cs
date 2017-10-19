@@ -30,6 +30,13 @@ namespace LizardNight
         // Use this for initialization
         protected virtual void Start()
         {
+            if(gridHandler == null) {
+                Debug.Log(this.name + " gridHandler is null, finding a GridHandler");
+                gridHandler = GameObject.Find("Grid System").GetComponent<GridHandler>();
+            }
+            if (gridHandler == null) {
+                Debug.LogError(this.name + " couldn't find a GridHandler!");
+            }
             positionX = (int)transform.position.x;
             positionY = (int)transform.position.y;
             Debug.Log("character X and Y set to actual X and Y from CharacterBase");

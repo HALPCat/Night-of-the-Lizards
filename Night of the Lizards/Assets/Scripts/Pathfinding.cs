@@ -13,11 +13,16 @@ namespace LizardNight
         private void Awake()
         {
             grid = GetComponent<GridHandler>();
+            if (seeker == null) {
+                Debug.LogError(this.name + " seeker is null, cannot FindPath()");
+            }
         }
 
         void Update()
         {
-            FindPath(seeker.position, target.position);
+            if(seeker != null) {
+                FindPath(seeker.position, target.position);
+            }
             
 
         }

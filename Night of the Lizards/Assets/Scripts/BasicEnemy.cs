@@ -12,7 +12,7 @@ namespace LizardNight
         private bool skipTurn;
 
         //has seen player
-       public bool triggered = false;
+        public bool triggered = false;
         //player position (if triggered)
         PlayerScript target;
         int targetY, targetX;
@@ -28,7 +28,7 @@ namespace LizardNight
         protected override void Start()
         {
             //adds enemy to the game master list
-            GameMaster.GM.AddEnemy(this);
+            //GameMaster.GM.AddEnemy(this);
            
 
             base.Start();
@@ -43,6 +43,17 @@ namespace LizardNight
           
         }
 
+        void OnBecameInvisible() {
+            Debug.Log(this.name + " is now invisible, disabling.");
+            GetComponent<BasicEnemy>().enabled = false;
+            GameMaster.GM.RemoveEnemy(this);
+        }
+
+        void OnBecameVisible() {
+            Debug.Log(this.name + " is now visible, enabling.");
+            GetComponent<BasicEnemy>().enabled = true;
+            GameMaster.GM.AddEnemy(this);
+        }
 
         protected override void Move()
         {
@@ -62,8 +73,12 @@ namespace LizardNight
         }
         public void Movement()
         {
-            
-                if (!triggered)
+            //Don't do anything if disabled
+            if (!gameObject.GetComponent<BasicEnemy>().enabled) {
+                return;
+            }
+
+            if (!triggered)
                 {
                     //if not triggered, will move randomly
                     int dir = UnityEngine.Random.Range(1, 5);
