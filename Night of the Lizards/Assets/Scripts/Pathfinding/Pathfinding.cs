@@ -2,64 +2,54 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 namespace LizardNight
 {
     public class Pathfinding : MonoBehaviour
     {
-        public Transform seeker, target;
-        
+        PathRequestManager requestManager;
         GridHandler grid;
+
+        List<Node> path;
 
         private void Awake()
         {
-            grid = GetComponent<GridHandler>();
-            if (seeker == null) {
-                Debug.LogError(this.name + " seeker is null, cannot FindPath()");
-            }
-        }
-
-        void Update()
-        {
-            if(seeker != null) {
-                FindPath(seeker.position, target.position);
-            }
+            requestManager = GetComponent<PathRequestManager>();
+            grid = GetComponent<GridHandler>();           
             
-
         }
 
-        void FindPath(Vector3 startPos, Vector3 targetPos)
+     
+        public void StartFindPath (Vector3 startPos, Vector3 endPos)
+        {
+            StartCoroutine(FindPath(startPos, endPos));
+        }
+
+
+        IEnumerator FindPath(Vector3 startPos, Vector3 targetPos)
         {
             Node startNode = grid.NodeFromWorldPoint(startPos);
             Node targetNode = grid.NodeFromWorldPoint(targetPos);
 
             
-            List<Node> openSet = new List<Node>();
+            Heap<Node> openSet = new Heap<Node>(grid.maxSize);
             HashSet<Node> closedSet = new HashSet<Node>();
             openSet.Add(startNode);
 
+            bool pathSuccess = false;
+            bool isTarget = false;
+            Vector3 waypoint= new Vector3();
 
-
-            
             while (openSet.Count > 0)
             {
 
-                Node node = openSet[0];
-                for (int i = 1; i < openSet.Count; i++)
-                {                                     
-                    if (openSet[i].fCost < node.fCost || openSet[i].fCost == node.fCost)
-                    {
-                        if(openSet[i].hCost < node.hCost)
-                        node = openSet[i];
-                    }
-                }
-                               
-                openSet.Remove(node);
+                Node node = openSet.RemoveFirst();
                 closedSet.Add(node);
                 
                 if (node == targetNode)
                 {
-                    RetracePath(startNode, targetNode);
-                    return;
+                    pathSuccess = true;                    
+                    break;
                 }
 
                 foreach (Node neighbour in grid.GetNeighbours(node))
@@ -82,13 +72,24 @@ namespace LizardNight
 
                         if (!openSet.Contains(neighbour))
                             openSet.Add(neighbour);
-                        
+                        else
+                            openSet.UpdateItem(neighbour);
+
                     }
                 }
             }
+            yield return null;
+            if (pathSuccess)
+            {
+               waypoint = RetracePath(startNode, targetNode);
+               isTarget = waypoint == targetPos ? true : false;
+                Debug.Log(isTarget);
+            }
+
+            requestManager.FinishedProcessingPath(waypoint, pathSuccess, isTarget);
         }
 
-        void RetracePath (Node startNode, Node endNode)
+        Vector3 RetracePath (Node startNode, Node endNode)
         {
             List<Node> path = new List<Node>();
             Node currentNode = endNode;
@@ -102,6 +103,8 @@ namespace LizardNight
             path.Reverse();
 
             grid.path = path;
+
+            return path[0].worldPosition;
         }
         int GetDistance (Node nodeA, Node nodeB)
         {
@@ -112,6 +115,27 @@ namespace LizardNight
                 return 14 * dstY + 10 * (dstX - dstY);
             return 14 * dstX + 10 * (dstY - dstX);
         }
-     
+
+        public void OnDrawGizmos()
+        {
+            if (path != null)
+            {
+                for (int i = 0; i < path.Count; i++)
+                {
+                    Gizmos.color = Color.black;
+                    Gizmos.DrawCube(path[i].worldPosition, Vector3.one);
+
+                    //if (i == targetIndex)
+                    //{
+                    //    Gizmos.DrawLine(transform.position, path[i]);
+                    //}
+                    //else
+                    //{
+                    //    Gizmos.DrawLine(path[i - 1], path[i]);
+                    //}
+                }
+            }
+        }
+
     }
 }

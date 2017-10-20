@@ -94,6 +94,24 @@ namespace LizardNight
             }
         }
 
+        protected void moveDiagonal( int tileX, int tileY)
+        {
+            //Move to new position if it is not a wall
+            if (gridHandler.getWalkable(positionX + tileX, positionY + tileY))
+            {
+                updateLastPosition();
+                transform.Translate(new Vector3(tileX, tileY));
+                positionX = (int)transform.position.x;
+                positionY = (int)transform.position.y;
+                updateNewPosition();
+
+            }
+            else
+            {
+                Debug.Log("Couldn't move");
+            }
+        }
+
         protected void updateLastPosition()
         {
             gridHandler.setCharGrid(positionX, positionY, null);

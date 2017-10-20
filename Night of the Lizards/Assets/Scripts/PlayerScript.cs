@@ -22,8 +22,7 @@ namespace LizardNight {
             if (!GameMaster.GM.playersTurn)
                 return;
 
-
-
+            
             Move();
 
 

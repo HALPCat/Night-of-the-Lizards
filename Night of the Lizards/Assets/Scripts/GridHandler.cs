@@ -92,6 +92,12 @@ namespace LizardNight {
 
         //MORE PATHFINDING STUFF
 
+        // returns max size of heap for pathfinding
+        public int maxSize
+        {
+            get { return DungeonHeight * DungeonWidth; }
+        }
+
         //draws path, for testing
         public List<Node> path;
         void OnDrawGizmos() {

@@ -70,10 +70,11 @@ namespace LizardNight
             //turn delay
             yield return new WaitForSeconds(turnTimer);
 
+
             //if there are no enemies
             if (enemies.Count == 0)
             {
-                yield return new WaitForSeconds(turnTimer);
+                yield return null;
             }
 
             for (int i = 0; i < enemies.Count; i++)
@@ -81,7 +82,7 @@ namespace LizardNight
                 if (!enemies[i].stationary)
                 enemies[i].Movement();
 
-                yield return new WaitForSeconds(turnTimer);
+                yield return null;
             }
 
             //player can now move
