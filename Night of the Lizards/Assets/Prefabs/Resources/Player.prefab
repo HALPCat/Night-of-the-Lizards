@@ -135,6 +135,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fdc8eb90fe526a246bbed495468988a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  positionX: 0
+  positionY: 0
   gridHandler: {fileID: 0}
 --- !u!124 &124067914871890502
 Behaviour:
@@ -175,12 +177,12 @@ SpriteRenderer:
   m_SortingLayerID: -137489277
   m_SortingLayer: 3
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 28fb55d27c6da24428525e1c2aa160f0, type: 3}
+  m_Sprite: {fileID: 21300000, guid: a7b5d3cad0ff33d409455380ef7481f0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.2, y: 0.2}
+  m_Size: {x: 2.56, y: 2.56}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

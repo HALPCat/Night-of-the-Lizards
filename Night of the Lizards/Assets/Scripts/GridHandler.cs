@@ -68,6 +68,7 @@ namespace LizardNight {
             // - - - - - - - - - - Begin dungeon generation - - - - - - - - - -
             dungeonGenerator.FillGrid(tileGrid, Resources.Load("Wall") as GameObject);  //Fills the entire floor with walls
             dungeonGenerator.RandomTunneler(tileGrid, dungeonGenerator.tunnelLength);   //Creates a tunnel on the floor
+            dungeonGenerator.RemoveCorners(tileGrid);                                   //Removes corners that make diagonals look weird
             dungeonGenerator.PlaceStairs(tileGrid);                                     //Places stairs on the floor
             dungeonGenerator.BuildDungeon(tileGrid);                                    //Instantiates the gameobjects in tileGrid
             // - - - - - - - - - - End dungeon generation - - - - - - - - - -

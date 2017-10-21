@@ -25,20 +25,6 @@ namespace LizardNight {
             playerScript.teleportToBeginning();
         }
 
-        void Update() {
-            /* Good old spaghetti and meat balls
-            if (Input.GetKeyDown(KeyCode.Return)) {
-                if (gridHandler.getGrid((int)player.transform.position.x, (int)player.transform.position.y).name.Equals("StairsDown(Clone)")) {
-                    gridHandler.destroyDungeon();
-                    //FillGrid(Resources.Load("Wall") as GameObject);
-                    //RandomTunneler(tunnelLength);
-                    //PlaceStairs();
-                    //gridHandler.buildDungeon();
-                }
-            }
-            */
-        }
-
         public void BuildDungeon(GameObject[,] grid) {
             int dungeonWidth = grid.GetLength(0);
             int dungeonHeight = grid.GetLength(1);
@@ -127,6 +113,63 @@ namespace LizardNight {
                 }
                 grid[currentX, currentY] = Resources.Load("Floor") as GameObject;
             }
+        }
+
+        public void RemoveCorners(GameObject[,] grid) {
+            int dungeonWidth = grid.GetLength(0);
+            int dungeonHeight = grid.GetLength(1);
+
+            bool nWest = false;
+            bool nEast = false;
+            bool sEast = false;
+            bool sWest = false;
+
+            bool cornersExist = true;
+            int loops = 0;
+
+            while (cornersExist) {
+                int corners = 0; //Amount of found corners
+
+                for (int i = 1; i < dungeonWidth - 1; i++) {
+                    for (int j = 1; j < dungeonHeight - 1; j++) {
+                        //Check surroundings
+                        if (grid[i, j] == (GameObject)Resources.Load("Wall")) {
+                            sWest = true;
+                        }
+                        if (grid[i + 1, j] == (GameObject)Resources.Load("Wall")) {
+                            sEast = true;
+                        }
+                        if (grid[i, j + 1] == (GameObject)Resources.Load("Wall")) {
+                            nWest = true;
+                        }
+                        if (grid[i + 1, j + 1] == (GameObject)Resources.Load("Wall")) {
+                            nEast = true;
+                        }
+
+                        if (nEast && sWest && !nWest && !sEast) {
+                            Debug.Log("Case found at " + i + "," + j + "!");
+                            grid[i, j] = Resources.Load("Floor") as GameObject;
+                            corners++;
+                        } else if (nWest && sEast && !nEast && !sWest) {
+                            Debug.Log("Case found at " + i + "," + j + "!");
+                            grid[i + 1, j] = Resources.Load("Floor") as GameObject;
+                            corners++;
+                        }
+
+                        sWest = false;
+                        sEast = false;
+                        nWest = false;
+                        nEast = false;
+                    }
+                }
+
+                loops++;
+                if(corners == 0) {
+                    cornersExist = false;
+                }
+            }
+
+            Debug.Log("RemoveCorners() ran through " + loops + " loops before completing.");
         }
 
         public void PlaceStairs(GameObject[,] grid) {
