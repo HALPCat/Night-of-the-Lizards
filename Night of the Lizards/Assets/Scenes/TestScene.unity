@@ -192,6 +192,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 1725387104032356, guid: 92a6a3eaf83f59241a2fd977837d1773,
     type: 2}
+--- !u!1 &1109290132 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1175610464525452, guid: 8aab8f343b6bc8545a56c210d5003f51,
+    type: 2}
+  m_PrefabInternal: {fileID: 1580698731}
+--- !u!114 &1109290138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1109290132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bf70bfab71ec8d8419dcf4f959034a81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1580698731
 Prefab:
   m_ObjectHideFlags: 0

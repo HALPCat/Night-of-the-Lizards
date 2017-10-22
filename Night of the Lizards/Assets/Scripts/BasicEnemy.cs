@@ -17,6 +17,8 @@ namespace LizardNight
         GameObject target;
         int targetY, targetX;
 
+        //combat
+        EnemyOne attributes;
         //pathfinding
 
         Vector3 path;
@@ -37,6 +39,7 @@ namespace LizardNight
             //adds enemy to the game master list
             //GameMaster.GM.AddEnemy(this);
 
+            attributes = GetComponent<EnemyOne>();
 
             base.Start();
 
@@ -115,6 +118,7 @@ namespace LizardNight
 
 
         }
+
         public void Movement()
         {
             //Don't do anything if disabled
@@ -153,13 +157,35 @@ namespace LizardNight
                     updateNewPosition();
                 }
                 else
-                    Debug.Log("Enemy should be attacking");
+                {
+                    target.GetComponent<PlayerScript>().takeDamage(attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue);
+                    //Attack();
+                }
             }
         }
 
+        public void takeDamage(int damage)
+        {
+            var health = attributes.GetStat<Vital>(StatType.Health);
+            health.StatCurrentValue -= damage;
+            Debug.Log("Enemy Health is " + health.StatCurrentValue);
 
+            if (health.StatCurrentValue == 0)
+            {
+                Debug.Log("You eat the delicious lizard meat of your enemy and heal five points of health");
+                target.SendMessage("HealDamage", 5);
+                
+                Destroy(gameObject);
+                
+            }
+        }
 
-
+        public void OnDestroy()
+        {
+            gridHandler.setNode(positionX, positionY, true);
+            gridHandler.setCharGrid(positionX, positionY, null);
+           
+        }
     }
 
 

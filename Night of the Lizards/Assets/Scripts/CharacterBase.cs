@@ -46,13 +46,14 @@ namespace LizardNight
             Debug.Log("character X and Y set to actual X and Y from CharacterBase");
             //Debug.Log(positionX + positionY);
             gridHandler.setNode(positionX, positionY, false);
+            updateNewPosition();
 
         }
 
         // Update is called once per frame
         protected virtual void Update()
         {
-            //Lets keep positions updated
+           
 
         }
 
@@ -88,8 +89,7 @@ namespace LizardNight
                     isFree = gridHandler.getWalkable(positionX + -1, positionY + -1); break; //down left
             }
 
-            Debug.Log("Can move is: " + isFree);
-
+           
             return isFree;
         }
 
