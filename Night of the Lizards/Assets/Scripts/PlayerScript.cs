@@ -3,13 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace LizardNight {
+namespace LizardNight
+{
 
 
-    public class PlayerScript : CharacterBase {
+    public class PlayerScript : CharacterBase
+    {
 
         //This is for movement
-        float timer = 0;
+        float timer = 0.25f;
 
 
         public int PositionX { get { return positionX; } }
@@ -17,23 +19,28 @@ namespace LizardNight {
 
 
         // Update is called once per frame
-        protected override void Update() {
+        protected override void Update()
+        {
             //doesn't act if not it's turn
             if (!GameMaster.GM.playersTurn)
                 return;
 
-            
+
             Move();
 
 
         }
 
-        public void teleportToBeginning() {
+        public void teleportToBeginning()
+        {
             GameObject stairsUp;
             stairsUp = GameObject.Find("StairsUp(Clone)");
-            if(stairsUp == null) {
+            if (stairsUp == null)
+            {
                 Debug.LogError("PlayerScript couldn't find StairsUp(Clone)!");
-            } else {
+            }
+            else
+            {
                 transform.position = new Vector3(stairsUp.transform.position.x, stairsUp.transform.position.y, 0);
                 positionX = (int)transform.position.x;
                 positionY = (int)transform.position.y;
@@ -41,17 +48,21 @@ namespace LizardNight {
             }
         }
 
-        protected override void Move() {
+        protected override void Move()
+        {
             //Going up
-            if (Input.GetAxisRaw(VerticalAxis) > 0) {
+            if (Input.GetAxisRaw(VerticalAxis) > 0)
+            {
                 //This is spaghetti and should be tied to the button name rather than actual keys
-                if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W)) {
+                if (canMove(3))
+                {
                     moveVertical(1);
                     timer = 0;
                     GameMaster.GM.playersTurn = false;
                 }
                 timer += Time.deltaTime;
-                if (timer >= 0.25f) {
+                if (timer >= 0.25f && canMove(3))
+                {
                     moveVertical(1);
                     timer = 0;
                     GameMaster.GM.playersTurn = false;
@@ -59,15 +70,18 @@ namespace LizardNight {
             }
 
             //Going down
-            else if (Input.GetAxisRaw(VerticalAxis) < 0) {
+            else if (Input.GetAxisRaw(VerticalAxis) < 0)
+            {
                 //This is spaghetti and should be tied to the button name rather than actual keys
-                if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S)) {
+                if (canMove(4))
+                {
                     moveVertical(-1);
                     timer = 0;
                     GameMaster.GM.playersTurn = false;
                 }
                 timer += Time.deltaTime;
-                if (timer >= 0.25f) {
+                if (timer >= 0.25f && canMove(4))
+                {
                     moveVertical(-1);
                     timer = 0;
                     GameMaster.GM.playersTurn = false;
@@ -75,15 +89,18 @@ namespace LizardNight {
             }
 
             //Going left
-            else if (Input.GetAxisRaw(HorizontalAxis) < 0) {
+            else if (Input.GetAxisRaw(HorizontalAxis) < 0)
+            {
                 //This is spaghetti and should be tied to the button name rather than actual keys
-                if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A)) {
+                if (canMove(2))
+                {
                     moveHorizontal(-1);
                     timer = 0;
                     GameMaster.GM.playersTurn = false;
                 }
                 timer += Time.deltaTime;
-                if (timer >= 0.25f) {
+                if (timer >= 0.25f && canMove(2))
+                {
                     moveHorizontal(-1);
                     timer = 0;
                     GameMaster.GM.playersTurn = false;
@@ -91,25 +108,89 @@ namespace LizardNight {
             }
 
             //Going right
-            else if (Input.GetAxisRaw(HorizontalAxis) > 0) {
+            else if (Input.GetAxisRaw(HorizontalAxis) > 0)
+            {
                 //This is spaghetti and should be tied to the button name rather than actual keys
-                if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D)) {
+                if (canMove(1))
+                {
                     moveHorizontal(1);
                     timer = 0;
                     GameMaster.GM.playersTurn = false;
                 }
                 timer += Time.deltaTime;
-                if (timer >= 0.25f) {
+                if (timer >= 0.25f && canMove(1))
+                {
                     moveHorizontal(1);
                     timer = 0;
                     GameMaster.GM.playersTurn = false;
                 }
             }
+
+            else if (Input.GetAxis(DiagonalUpAxis) > 0)
+            {
+                if (canMove(5))
+                {
+                    moveDiagonal(1, 1);
+                    timer = 0;
+                    GameMaster.GM.playersTurn = false;
+                }
+                if (timer >= 0.25f && canMove(5))
+                {
+                    moveDiagonal(1, 1);
+                    timer = 0;
+                    GameMaster.GM.playersTurn = false;
+                }
+            }
+            else if (Input.GetAxis(DiagonalUpAxis) < 0)
+            {
+                if (canMove(7))
+                {
+                    moveDiagonal(-1, 1);
+                    timer = 0;
+                    GameMaster.GM.playersTurn = false;
+                }
+                if (timer >= 0.25f && canMove(7))
+                {
+                    moveDiagonal(-1, 1);
+                    timer = 0;
+                    GameMaster.GM.playersTurn = false;
+                }
+            }
+            else if (Input.GetAxis(DiagonalDownAxis) > 0)
+            {
+                if (canMove(6))
+                {
+                    moveDiagonal(1, -1);
+                    timer = 0;
+                    GameMaster.GM.playersTurn = false;
+                }
+                if (timer >= 0.25f && canMove(6))
+                {
+                    moveDiagonal(1, -1);
+                    timer = 0;
+                    GameMaster.GM.playersTurn = false;
+                }
+            }
+            else if (Input.GetAxis(DiagonalDownAxis) < 0)
+            {
+                if (canMove(8))
+                {
+                    moveDiagonal(-1, -1);
+                    timer = 0;
+                    GameMaster.GM.playersTurn = false;
+                }
+                if (timer >= 0.25f && canMove(8))
+                {
+                    moveDiagonal(-1, -1);
+                    timer = 0;
+                    GameMaster.GM.playersTurn = false;
+                }
+            }
         }
+        
 
-
-
-        private void theEnd() {
+        private void theEnd()
+        {
             if (health <= 0)
                 GameMaster.GM.GameOver();
         }

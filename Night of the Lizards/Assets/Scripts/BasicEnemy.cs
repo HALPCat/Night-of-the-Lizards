@@ -66,7 +66,42 @@ namespace LizardNight
 
         protected override void Move()
         {
-            throw new NotImplementedException();
+            //if not triggered, will move randomly
+            int dir = UnityEngine.Random.Range(1, 8);
+
+            while (!canMove(dir))
+            {
+                dir = UnityEngine.Random.Range(1, 8);
+            }
+
+            switch (dir)
+            {
+                case 1:
+                    moveHorizontal(1);
+                    break;
+                case 2:
+                    moveHorizontal(-1);
+                    break;
+                case 3:
+                    moveVertical(1);
+                    break;
+                case 4:
+                    moveVertical(-1);
+                    break;
+                case 5:
+                    moveDiagonal(1, 1);
+                    break;
+                case 6:
+                    moveDiagonal(-1, 1);
+                    break;
+                case 7:
+                    moveDiagonal(1, -1);
+                    break;
+                case 8:
+                    moveDiagonal(-1, -1);
+                    break;
+
+            }
         }
 
         void OnTriggerEnter2D(Collider2D col)
@@ -90,25 +125,7 @@ namespace LizardNight
 
             if (!triggered)
             {
-                //if not triggered, will move randomly
-                int dir = UnityEngine.Random.Range(1, 5);
-
-                switch (dir)
-                {
-                    case 1:
-                        moveHorizontal(1);
-                        break;
-                    case 2:
-                        moveHorizontal(-1);
-                        break;
-                    case 3:
-                        moveVertical(1);
-                        break;
-                    case 4:
-                        moveVertical(-1);
-                        break;
-
-                }
+                Move();  
             }
             //if triggered by player will pursue
             else
@@ -119,6 +136,8 @@ namespace LizardNight
 
             }
         }
+
+        
 
         public void Pursue(Vector3 newPos, bool pathSuccesfull, bool isTarget)
         {
