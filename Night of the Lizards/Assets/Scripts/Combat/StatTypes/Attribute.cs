@@ -12,7 +12,8 @@ namespace LizardNight
         private int _statLinkerValue;
         private List<StatLinker> _statLinkers;
 
-        public int StatLevelValue
+       
+            public int StatLevelValue
         {
             get { return _statLevelValue; }
         }
@@ -38,6 +39,7 @@ namespace LizardNight
         {
             _statLinkers.Add(linker);
             linker.OnValueChange += OnLinkerValueChange;
+           
         }
         
         public void RemoveLinker(StatLinker linker)
@@ -67,6 +69,7 @@ namespace LizardNight
             foreach (StatLinker link in _statLinkers)
             {
                 _statLinkerValue += link.Value;
+                Debug.Log(_statLinkers.Count);
             }
             TriggerValueChange();
         }

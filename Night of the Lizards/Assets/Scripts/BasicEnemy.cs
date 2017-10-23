@@ -109,7 +109,7 @@ namespace LizardNight
 
         void OnTriggerEnter2D(Collider2D col)
         {
-            Debug.Log("entered trigger");
+           
             if (col.tag == "Player")
             {
                 triggered = true;
@@ -158,7 +158,7 @@ namespace LizardNight
                 }
                 else
                 {
-                    target.GetComponent<PlayerScript>().takeDamage(attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue);
+                    target.GetComponent<PlayerScript>().takeDamage(attributes.GetStat<Attribute>(StatType.PhysDamage).StatValue);
                     //Attack();
                 }
             }
@@ -172,8 +172,8 @@ namespace LizardNight
 
             if (health.StatCurrentValue == 0)
             {
-                Debug.Log("You eat the delicious lizard meat of your enemy and heal five points of health");
-                target.SendMessage("HealDamage", 5);
+                Debug.Log("You eat the delicious lizard meat of your enemy and recover ten points of health");
+                target.SendMessage("HealDamage", 10);
                 
                 Destroy(gameObject);
                 

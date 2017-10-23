@@ -14,9 +14,9 @@ namespace LizardNight
         [SerializeField]
         int Constitution = 2;
         [SerializeField]
-        int Damage = 1;
+        int Damage = 0;
         [SerializeField]
-        int Strenght = 2;
+        int Strenght = 1;
 
         protected override void ConfigureStats()
         {
@@ -24,7 +24,7 @@ namespace LizardNight
             constitution.SetStat("Constitution", Constitution);
 
             var strenght = CreateOrGetStat<Attribute>(StatType.Strenght);
-            constitution.SetStat("Strenght", Strenght);
+            strenght.SetStat("Strenght", Strenght);
 
             var health = CreateOrGetStat<Vital>(StatType.Health);
             health.SetStat("Health", Health);
@@ -37,7 +37,7 @@ namespace LizardNight
             physDamage.AddLinker(new LinkerBasic(CreateOrGetStat<Attribute>(StatType.Strenght), 5));
             physDamage.UpdateLinkers();
 
-            Debug.Log("Enemy damage is " + physDamage.StatBaseValue);
+            
 
 
 

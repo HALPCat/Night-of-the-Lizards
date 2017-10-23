@@ -6,11 +6,12 @@ using UnityEngine;
 namespace LizardNight
 {
 
-    public abstract class StatLinker : IStatValueChange
+    public abstract class StatLinker :IStatValueChange
     {
         private Stat _stat;
-
+        public abstract int Value { get; }
         public event EventHandler OnValueChange;
+
         
         public StatLinker (Stat stat)
         {
@@ -28,14 +29,11 @@ namespace LizardNight
             get { return _stat; }
         }
 
-        public abstract int Value { get; }
-
-
         private void OnLinkedStatValueChange(object sender, EventArgs args)
         {
             if (OnValueChange != null)
             {
-                OnValueChange(this, args);
+                OnValueChange(this, null);
             }
         }
     }

@@ -135,6 +135,7 @@ namespace LizardNight
         {
             gridHandler.setCharGrid(positionX, positionY, this.gameObject);
             gridHandler.setNode(positionX, positionY, false);
+           
         }
 
         public int GetX

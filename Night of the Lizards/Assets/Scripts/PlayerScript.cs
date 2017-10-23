@@ -68,7 +68,7 @@ namespace LizardNight
 
                 if (!canMove(direction))
                     if (CanAttack(direction))
-                    {
+                    {                        
                         Attack(direction);
                     }
                 if (canMove(direction))
@@ -143,7 +143,7 @@ namespace LizardNight
                 int direction = 1;
 
                 if (!canMove(direction))
-                    //if (CanAttack(direction))
+                    if (CanAttack(direction))
                     {
                         Attack(direction);
                     }
@@ -253,16 +253,7 @@ namespace LizardNight
         }
 
 
-
-        protected void Attack(int posX, int posY)
-        {
-            if (gridHandler.getCharGrid(posX, posY).tag == "enemy")
-            {
-                GameObject target = gridHandler.getCharGrid(posX, posY);
-                Debug.Log("Attacks the enemy!!");
-            }
-
-        }
+            
         protected bool CanAttack(int direction)
         {
             bool isEnemy = false;
@@ -270,30 +261,51 @@ namespace LizardNight
             switch (direction)
             {
                 case 1:
-                    isEnemy = gridHandler.getCharGrid(positionX + 1, positionY).tag == "enemy" ? true : false; break; //right
+                    isEnemy = gridHandler.getCharGrid(positionX + 1, positionY) != null ? true : false; return isEnemy ; //right
                 case 2:
-                    isEnemy = gridHandler.getCharGrid(positionX - 1, positionY).tag == "enemy" ? true : false; break; // left
+                    isEnemy = gridHandler.getCharGrid(positionX - 1, positionY) != null ? true : false; return isEnemy; // left
                 case 3:
-                    isEnemy = gridHandler.getCharGrid(positionX - 1, positionY).tag == "enemy"? true : false; break; //up
+                    isEnemy = gridHandler.getCharGrid(positionX , positionY +1) != null ? true : false; return isEnemy; //up
                 case 4:
-                    isEnemy = gridHandler.getCharGrid(positionX, positionY - 1).tag == "enemy" ? true : false; break; //down
+                    isEnemy = gridHandler.getCharGrid(positionX, positionY - 1) != null ? true : false; return isEnemy; //down
                 case 5:
-                    isEnemy = gridHandler.getCharGrid(positionX + 1, positionY + 1).tag == "enemy" ? true : false; break; //up right
+                    isEnemy = gridHandler.getCharGrid(positionX + 1, positionY + 1) != null ? true : false; return isEnemy; //up right
                 case 6:
-                    isEnemy = gridHandler.getCharGrid(positionX + 1, positionY + -1).tag == "enemy" ? true : false; break; //down right
+                    isEnemy = gridHandler.getCharGrid(positionX + 1, positionY + -1) != null ? true : false; return isEnemy; //down right
                 case 7:
-                    isEnemy = gridHandler.getCharGrid(positionX + -1, positionY + 1).tag == "enemy" ? true : false; break; //up left
+                    isEnemy = gridHandler.getCharGrid(positionX + -1, positionY + 1) != null ? true : false; return isEnemy; //up left
                 case 8:
-                    isEnemy = gridHandler.getCharGrid(positionX + -1, positionY + -1).tag == "enemy" ? true : false; break; //down left
+                    isEnemy = gridHandler.getCharGrid(positionX + -1, positionY + -1) != null ? true : false; return isEnemy; //down left
             }
-                     
+            //switch (direction)
+            //{
+            //    case 1:
+            //        isEnemy = gridHandler.getCharGrid(positionX + 1, positionY).tag == "enemy" ? true : false; break; //right
+            //    case 2:
+            //        isEnemy = gridHandler.getCharGrid(positionX - 1, positionY).tag == "enemy" ? true : false; break; // left
+            //    case 3:
+            //        isEnemy = gridHandler.getCharGrid(positionX - 1, positionY).tag == "enemy" ? true : false; break; //up
+            //    case 4:
+            //        isEnemy = gridHandler.getCharGrid(positionX, positionY - 1).tag == "enemy" ? true : false; break; //down
+            //    case 5:
+            //        isEnemy = gridHandler.getCharGrid(positionX + 1, positionY + 1).tag == "enemy" ? true : false; break; //up right
+            //    case 6:
+            //        isEnemy = gridHandler.getCharGrid(positionX + 1, positionY + -1).tag == "enemy" ? true : false; break; //down right
+            //    case 7:
+            //        isEnemy = gridHandler.getCharGrid(positionX + -1, positionY + 1).tag == "enemy" ? true : false; break; //up left
+            //    case 8:
+            //        isEnemy = gridHandler.getCharGrid(positionX + -1, positionY + -1).tag == "enemy" ? true : false; break; //down left
+            //}
+
 
             return isEnemy;
         }
 
         protected void Attack(int direction)
         {
-            
+           
+
+
             switch (direction)
             {
                 case 1:
@@ -303,7 +315,7 @@ namespace LizardNight
                    gridHandler.getCharGrid(positionX - 1, positionY).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); ;
                     break;
                     case 3:
-                    gridHandler.getCharGrid(positionX, positionY + 1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); ; break; //up
+                    gridHandler.getCharGrid(positionX, positionY + 1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); ; ; break; //up
                 case 4:
                     gridHandler.getCharGrid(positionX, positionY - 1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); ; break; //down
                 case 5:
@@ -327,6 +339,7 @@ namespace LizardNight
         public void takeDamage(int damage)
         {
             var health = attributes.GetStat<Vital>(StatType.Health);
+            //add armor class and damage reduction
             health.StatCurrentValue -= damage;
             Debug.Log("Player Health is " + health.StatCurrentValue);
 
@@ -336,7 +349,7 @@ namespace LizardNight
             }
         }
 
-        public void HealDamage (int damage)
+        public void HealDamage(int damage)
         {
             var health = attributes.GetStat<Vital>(StatType.Health);
             health.StatCurrentValue += damage;

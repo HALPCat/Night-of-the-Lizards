@@ -24,7 +24,7 @@ namespace LizardNight
             constitution.SetStat("Constitution", Constitution);
 
             var strenght = CreateOrGetStat<Attribute>(StatType.Strenght);
-            constitution.SetStat("Strenght", Strenght);
+            strenght.SetStat("Strenght", Strenght);
 
             var health = CreateOrGetStat<Vital>(StatType.Health);
             health.SetStat("Health", Health);
@@ -33,13 +33,12 @@ namespace LizardNight
             health.SetCurrentValueToMax();
 
             var physDamage = CreateOrGetStat<Attribute>(StatType.PhysDamage);
-            physDamage.SetStat("Physical Damage", Damage);
+            physDamage.SetStat("Physical Damage", 1);
             physDamage.AddLinker(new LinkerBasic(CreateOrGetStat<Attribute>(StatType.Strenght), 3));
             physDamage.UpdateLinkers();
           
 
-
-           
+                     
         }
 
 
