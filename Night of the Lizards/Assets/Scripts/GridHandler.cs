@@ -13,11 +13,18 @@ namespace LizardNight {
         private int dungeonWidth = 10;
         [SerializeField]
         private int dungeonHeight = 10;
+        
+        private int dungeonFloor = 0;
 
         //Grid for dungeon tiles
         private GameObject[,] tileGrid;
         //characters grid
         private GameObject[,] charGrid;
+
+        GameObject player;
+        PlayerScript playerScript;
+
+
 
         //The dungeon generator that this grid handler uses for building dungeons
         [SerializeField]
@@ -25,6 +32,9 @@ namespace LizardNight {
 
         public int DungeonWidth { get { return dungeonWidth; } }
         public int DungeonHeight { get { return dungeonHeight; } }
+
+
+
 
         //PATHFINDING STUFF
         public LayerMask unwalkableMask;
@@ -34,6 +44,9 @@ namespace LizardNight {
         private Node[,] nodeGrid;
         float nodeDiameter;
         int gridSizeX, gridSizeY;
+
+
+
 
         //I have no idea how array getters and setters work so I'll just make bootleg methods
         public GameObject getTileGrid(int x, int y) {
@@ -59,6 +72,9 @@ namespace LizardNight {
                 Debug.LogError("GridHandler couldn't find an instance of DungeonGenerator!");
             }
 
+            player = GameObject.Find("Player");
+            playerScript = player.GetComponent<PlayerScript>();
+
 
             //Set the tileGrid and charGrid to be the given size
             tileGrid = new GameObject[dungeonWidth, dungeonHeight];
@@ -66,18 +82,39 @@ namespace LizardNight {
 
 
             // - - - - - - - - - - Begin dungeon generation - - - - - - - - - -
+
+            NewFloor();
+
+            // - - - - - - - - - - End dungeon generation - - - - - - - - - -
+
+            /*
+            CreateNodeGrid();
+            fillCharGrid();
+            */
+        }
+
+        public void NewFloor() {
+            dungeonGenerator.DestroyEnemies();
+            dungeonGenerator.DestroyDungeon(tileGrid);
             dungeonGenerator.FillGrid(tileGrid, Resources.Load("Wall") as GameObject);  //Fills the entire floor with walls
             dungeonGenerator.RandomTunneler(tileGrid, dungeonGenerator.tunnelLength);   //Creates a tunnel on the floor
             dungeonGenerator.RemoveCorners(tileGrid);                                   //Removes corners that make diagonals look weird
             dungeonGenerator.PlaceStairs(tileGrid);                                     //Places stairs on the floor
+            dungeonGenerator.UpdateFreeFloors(tileGrid);                                //Used for finding spots for the enemies
+            dungeonGenerator.SpawnEnemies(tileGrid, (GameObject)Resources.Load("Enemy"), 10);   //Places enemies
             dungeonGenerator.BuildDungeon(tileGrid);                                    //Instantiates the gameobjects in tileGrid
-            // - - - - - - - - - - End dungeon generation - - - - - - - - - -
-
+            StartCoroutine(TimerTest());
 
             CreateNodeGrid();
             fillCharGrid();
-        }
 
+            dungeonFloor++;
+        }
+        IEnumerator TimerTest() {
+            yield return new WaitForEndOfFrame();
+
+            playerScript.teleportToBeginning();
+        }
         void Start() {
 
         }
@@ -101,6 +138,7 @@ namespace LizardNight {
 
         //draws path, for testing
         public List<Node> path;
+        
         void OnDrawGizmos() {
             Gizmos.DrawWireCube(new Vector3(8, 4), new Vector3(dungeonWidth, dungeonHeight));
             if (nodeGrid != null)
@@ -112,10 +150,10 @@ namespace LizardNight {
                             Gizmos.color = Color.blue;
                         }
 
-                    Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - .1f));
+                    Gizmos.DrawCube(n.worldPosition, Vector3.one * (nodeDiameter - .75f));
                 }
         }
-
+        
 
         public void CreateNodeGrid() {
             nodeDiameter = nodeRadius * 2;

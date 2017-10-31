@@ -128,7 +128,7 @@ namespace LizardNight
                 {
                     updateLastPosition();
                     transform.Translate(new Vector3(newPos.x - positionX, newPos.y - positionY));
-                    Debug.Log("New Position is: " + newPos);
+                    //Debug.Log("New Position is: " + newPos);
                     positionX = (int)transform.position.x;
                     positionY = (int)transform.position.y;
                     updateNewPosition();

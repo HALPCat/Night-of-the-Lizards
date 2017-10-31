@@ -5,7 +5,6 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour {
 
     [SerializeField]
-    GameObject enemyPrefab;
 
 	// Use this for initialization
 	void Start () {
@@ -14,10 +13,11 @@ public class EnemySpawner : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetButtonDown("Jump")) {
-            GameObject enemy;
-            enemy = Instantiate(enemyPrefab, GetComponentInParent<Transform>().position, Quaternion.identity);
-            Debug.Log("Enemy spawned");
-        }
+
 	}
+
+    void spawnEnemy(GameObject enemyPrefab) {
+        GameObject enemy;
+        enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
+    }
 }

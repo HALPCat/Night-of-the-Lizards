@@ -15,8 +15,17 @@ namespace LizardNight {
         public int PositionX { get { return positionX; } }
         public int PositionY { get { return positionY; } }
 
+        GameObject stairsDown;
+        GridHandler gridHandler;
 
-        // Update is called once per frame
+        protected override void Awake() {
+            if (gridHandler == null) {
+                gridHandler = GameObject.Find("Grid System").GetComponent<GridHandler>();
+            }
+            if (gridHandler == null) {
+                Debug.LogError("PlayerScript couldn't find the Grid Handler!");
+            }
+        }
         protected override void Update() {
             //doesn't act if not it's turn
             if (!GameMaster.GM.playersTurn)
@@ -24,14 +33,13 @@ namespace LizardNight {
 
             
             Move();
-
-
         }
 
         public void teleportToBeginning() {
             GameObject stairsUp;
             stairsUp = GameObject.Find("StairsUp(Clone)");
-            if(stairsUp == null) {
+
+            if (stairsUp == null) {
                 Debug.LogError("PlayerScript couldn't find StairsUp(Clone)!");
             } else {
                 transform.position = new Vector3(stairsUp.transform.position.x, stairsUp.transform.position.y, 0);
@@ -103,6 +111,13 @@ namespace LizardNight {
                     moveHorizontal(1);
                     timer = 0;
                     GameMaster.GM.playersTurn = false;
+                }
+            }
+
+            if (Input.GetButtonDown("Jump")) {
+                stairsDown = GameObject.Find("StairsDown(Clone)");
+                if (transform.position == stairsDown.transform.position) {
+                    gridHandler.NewFloor();
                 }
             }
         }

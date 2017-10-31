@@ -9,20 +9,28 @@ namespace LizardNight {
         public GridHandler gridHandler;
         [SerializeField]
         public int tunnelLength = 20;
-        GameObject player;
 
-        void Awake() {
 
-        }
+        public List<Vector2> freeFloorPositions = new List<Vector2>();
 
-        void OnEnable() {
-
-        }
 
         void Start() {
-            player = GameObject.Find("Player");
-            PlayerScript playerScript = player.GetComponent<PlayerScript>();
-            playerScript.teleportToBeginning();
+
+        }
+
+        public void UpdateFreeFloors(GameObject[,] grid) {
+            int dungeonWidth = grid.GetLength(0);
+            int dungeonHeight = grid.GetLength(1);
+
+            freeFloorPositions.Clear();
+
+            for (int i = 0; i < dungeonWidth; i++) {
+                for (int j = 0; j < dungeonHeight; j++) {
+                    if(grid[i,j] == Resources.Load("Floor")) {
+                        freeFloorPositions.Add(new Vector2(i, j));
+                    }
+                }
+            }
         }
 
         public void BuildDungeon(GameObject[,] grid) {
@@ -31,7 +39,7 @@ namespace LizardNight {
             for (int i = 0; i < dungeonWidth; i++) {
                 for (int j = 0; j < dungeonHeight; j++) {
                     //Create a tile in the grid in corresponding coordinates
-                    grid[i, j] = (GameObject)Instantiate(grid[i, j], new Vector3(transform.position.x + i, transform.position.y + j), Quaternion.identity);
+                    grid[i, j] = Instantiate(grid[i, j], new Vector3(transform.position.x + i, transform.position.y + j), Quaternion.identity);
                 }
             }
         }
@@ -43,7 +51,8 @@ namespace LizardNight {
             for (int i = 0; i < dungeonWidth; i++) {
                 for (int j = 0; j < dungeonHeight; j++) {
                     currentTile = grid[i, j];
-                    Destroy(currentTile);
+                    //Destroy(currentTile);
+                    Destroy(grid[i, j]);
                 }
             }
         }
@@ -199,6 +208,31 @@ namespace LizardNight {
                     grid[randX, randY] = Resources.Load("StairsUp") as GameObject;
                     upStairPlaced = true;
                 }
+            }
+        }
+
+        public void SpawnEnemy(GameObject[,] grid, GameObject enemyPrefab, Vector2 position) {
+            GameObject enemy; 
+            enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
+        }
+
+        public void SpawnEnemies(GameObject[,] grid, GameObject enemyPrefab, int amount) {
+            for (int i = 0; i < amount; i++) {
+                int rand = Random.Range(0, freeFloorPositions.Count);
+                SpawnEnemy(grid, enemyPrefab, freeFloorPositions[rand]);
+                freeFloorPositions.RemoveAt(rand);
+            }
+        }
+
+        public void DestroyEnemies() {
+            foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("enemy")){
+                Destroy(enemy);
+            }
+        }
+
+        public void FloorCountDebugger(){
+            for (int i = 0; i < freeFloorPositions.Count; i++) {
+                Debug.Log("freeFloorPositions[" + i + "] = "  + freeFloorPositions[i]);
             }
         }
 
