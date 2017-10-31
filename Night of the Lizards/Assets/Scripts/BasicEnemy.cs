@@ -70,11 +70,11 @@ namespace LizardNight
         protected override void Move()
         {
             //if not triggered, will move randomly
-            int dir = UnityEngine.Random.Range(1, 8);
+            int dir = UnityEngine.Random.Range(1, 4);
 
             while (!canMove(dir))
             {
-                dir = UnityEngine.Random.Range(1, 8);
+                dir = UnityEngine.Random.Range(1, 4);
             }
 
             switch (dir)

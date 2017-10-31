@@ -74,19 +74,19 @@ namespace LizardNight
                 case 1:
                     isFree = gridHandler.getWalkable(positionX + 1, positionY); break; //right
                 case 2:
-                    isFree = gridHandler.getWalkable(positionX -1 , positionY); break; // left
+                    isFree = gridHandler.getWalkable(positionX - 1 , positionY); break; // left
                 case 3:
                     isFree = gridHandler.getWalkable(positionX, positionY + 1); break; //up
                 case 4:
-                    isFree = gridHandler.getWalkable(positionX, positionY -1); break; //down
+                    isFree = gridHandler.getWalkable(positionX, positionY - 1); break; //down
                 case 5:
                     isFree = gridHandler.getWalkable(positionX + 1, positionY + 1); break; //up right
                 case 6:
-                    isFree = gridHandler.getWalkable(positionX + 1, positionY + -1); break; //down right
+                    isFree = gridHandler.getWalkable(positionX + 1, positionY - 1); break; //down right
                 case 7:
-                    isFree = gridHandler.getWalkable(positionX + -1, positionY + 1); break; //up left
+                    isFree = gridHandler.getWalkable(positionX - 1, positionY + 1); break; //up left
                 case 8:
-                    isFree = gridHandler.getWalkable(positionX + -1, positionY + -1); break; //down left
+                    isFree = gridHandler.getWalkable(positionX - 1, positionY - 1); break; //down left
             }
 
            
