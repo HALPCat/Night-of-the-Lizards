@@ -17,6 +17,8 @@ namespace LizardNight
         GameObject target;
         int targetY, targetX;
 
+        //combat
+        EnemyOne attributes;
         //pathfinding
 
         Vector3 path;
@@ -37,6 +39,7 @@ namespace LizardNight
             //adds enemy to the game master list
             //GameMaster.GM.AddEnemy(this);
 
+            attributes = GetComponent<EnemyOne>();
 
             base.Start();
 
@@ -66,12 +69,47 @@ namespace LizardNight
 
         protected override void Move()
         {
-            throw new NotImplementedException();
+            //if not triggered, will move randomly
+            int dir = UnityEngine.Random.Range(1, 8);
+
+            while (!canMove(dir))
+            {
+                dir = UnityEngine.Random.Range(1, 8);
+            }
+
+            switch (dir)
+            {
+                case 1:
+                    moveHorizontal(1);
+                    break;
+                case 2:
+                    moveHorizontal(-1);
+                    break;
+                case 3:
+                    moveVertical(1);
+                    break;
+                case 4:
+                    moveVertical(-1);
+                    break;
+                case 5:
+                    moveDiagonal(1, 1);
+                    break;
+                case 6:
+                    moveDiagonal(-1, 1);
+                    break;
+                case 7:
+                    moveDiagonal(1, -1);
+                    break;
+                case 8:
+                    moveDiagonal(-1, -1);
+                    break;
+
+            }
         }
 
         void OnTriggerEnter2D(Collider2D col)
         {
-            Debug.Log("entered trigger");
+           
             if (col.tag == "Player")
             {
                 triggered = true;
@@ -80,6 +118,7 @@ namespace LizardNight
 
 
         }
+
         public void Movement()
         {
             //Don't do anything if disabled
@@ -90,25 +129,7 @@ namespace LizardNight
 
             if (!triggered)
             {
-                //if not triggered, will move randomly
-                int dir = UnityEngine.Random.Range(1, 5);
-
-                switch (dir)
-                {
-                    case 1:
-                        moveHorizontal(1);
-                        break;
-                    case 2:
-                        moveHorizontal(-1);
-                        break;
-                    case 3:
-                        moveVertical(1);
-                        break;
-                    case 4:
-                        moveVertical(-1);
-                        break;
-
-                }
+                Move();  
             }
             //if triggered by player will pursue
             else
@@ -119,6 +140,8 @@ namespace LizardNight
 
             }
         }
+
+        
 
         public void Pursue(Vector3 newPos, bool pathSuccesfull, bool isTarget)
         {
@@ -134,13 +157,35 @@ namespace LizardNight
                     updateNewPosition();
                 }
                 else
-                    Debug.Log("Enemy should be attacking");
+                {
+                    target.GetComponent<PlayerScript>().takeDamage(attributes.GetStat<Attribute>(StatType.PhysDamage).StatValue);
+                    //Attack();
+                }
             }
         }
 
+        public void takeDamage(int damage)
+        {
+            var health = attributes.GetStat<Vital>(StatType.Health);
+            health.StatCurrentValue -= damage;
+            Debug.Log("Enemy Health is " + health.StatCurrentValue);
 
+            if (health.StatCurrentValue == 0)
+            {
+                Debug.Log("You eat the delicious lizard meat of your enemy and recover ten points of health");
+                target.SendMessage("HealDamage", 10);
+                
+                Destroy(gameObject);
+                
+            }
+        }
 
-
+        public void OnDestroy()
+        {
+            gridHandler.setNode(positionX, positionY, true);
+            gridHandler.setCharGrid(positionX, positionY, null);
+           
+        }
     }
 
 

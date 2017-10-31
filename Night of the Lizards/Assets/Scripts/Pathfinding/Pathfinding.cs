@@ -83,7 +83,6 @@ namespace LizardNight
             {
                waypoint = RetracePath(startNode, targetNode);
                isTarget = waypoint == targetPos ? true : false;
-                Debug.Log(isTarget);
             }
 
             requestManager.FinishedProcessingPath(waypoint, pathSuccess, isTarget);
@@ -125,15 +124,7 @@ namespace LizardNight
                     Gizmos.color = Color.black;
                     Gizmos.DrawCube(path[i].worldPosition, Vector3.one);
 
-                    //if (i == targetIndex)
-                    //{
-                    //    Gizmos.DrawLine(transform.position, path[i]);
-                    //}
-                    //else
-                    //{
-                    //    Gizmos.DrawLine(path[i - 1], path[i]);
-                    //}
-                }
+                                    }
             }
         }
 
