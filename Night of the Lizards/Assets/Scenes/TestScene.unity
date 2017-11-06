@@ -547,6 +547,11 @@ Prefab:
       propertyPath: gridHandler
       value: 
       objectReference: {fileID: 1969715890}
+    - target: {fileID: 20999209999565964, guid: 8aab8f343b6bc8545a56c210d5003f51,
+        type: 2}
+      propertyPath: m_RenderingPath
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 8aab8f343b6bc8545a56c210d5003f51, type: 2}
   m_IsPrefabParent: 0
@@ -595,6 +600,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dungeonWidth: 32
   dungeonHeight: 32
+  GM: {fileID: 0}
   dungeonGenerator: {fileID: 1969715891}
   unwalkableMask:
     serializedVersion: 2
