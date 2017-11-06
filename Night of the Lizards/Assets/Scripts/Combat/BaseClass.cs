@@ -17,7 +17,7 @@ namespace LizardNight
         int Damage = 1;
         [SerializeField]
         int Strenght = 5;
-        
+
         protected override void ConfigureStats()
         {
             var constitution = CreateOrGetStat<Attribute>(StatType.Constitution);
@@ -28,7 +28,7 @@ namespace LizardNight
 
             var health = CreateOrGetStat<Vital>(StatType.Health);
             health.SetStat("Health", Health);
-            health.AddLinker(new LinkerBasic(CreateOrGetStat< Attribute > (StatType.Constitution), 5));
+            health.AddLinker(new LinkerBasic(CreateOrGetStat<Attribute>(StatType.Constitution), 5));
             health.UpdateLinkers();
             health.SetCurrentValueToMax();
 
@@ -36,10 +36,19 @@ namespace LizardNight
             physDamage.SetStat("Physical Damage", 1);
             physDamage.AddLinker(new LinkerBasic(CreateOrGetStat<Attribute>(StatType.Strenght), 3));
             physDamage.UpdateLinkers();
-          
 
-                     
+
+
         }
+
+        public void LevelUpStats(int level)
+        {
+            foreach (var key in StatDict.Keys)
+            {
+                
+            }
+        }
+
 
 
 

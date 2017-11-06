@@ -17,6 +17,8 @@ namespace LizardNight
         BaseClass attributes;
 
 
+
+
         public int PositionX { get { return positionX; } }
         public int PositionY { get { return positionY; } }
 
@@ -26,8 +28,10 @@ namespace LizardNight
         protected override void Awake()
         {
             attributes = GetComponent<BaseClass>();
-            
+
             base.Awake();
+
+            CharLevel.OnCharLevelUp += OnLevelUp;
 
         }
         protected override void Update()
@@ -36,8 +40,9 @@ namespace LizardNight
             if (!GameMaster.GM.playersTurn)
                 return;
 
-
             Move();
+
+
         }
 
         public void teleportToBeginning()
@@ -67,12 +72,12 @@ namespace LizardNight
 
                 if (!canMove(direction))
                     if (CanAttack(direction))
-                    {                        
+                    {
                         Attack(direction);
                     }
                 if (canMove(direction))
                 {
-                    
+
                     moveVertical(1);
                     timer = 0;
                     GameMaster.GM.playersTurn = false;
@@ -161,9 +166,11 @@ namespace LizardNight
                 }
             }
 
-            if (Input.GetButtonDown("Jump")) {
+            if (Input.GetButtonDown("Jump"))
+            {
                 stairsDown = GameObject.Find("StairsDown(Clone)");
-                if (transform.position == stairsDown.transform.position) {
+                if (transform.position == stairsDown.transform.position)
+                {
                     gridHandler.NewFloor();
                 }
             }
@@ -256,10 +263,22 @@ namespace LizardNight
                     GameMaster.GM.playersTurn = false;
                 }
             }
+
+            //else if (Input.GetAxis(Wait) >0)
+            //{
+            //    timer = 0;
+            //    GameMaster.GM.playersTurn = false;
+
+            //    if (timer >= 0.25f)
+            //    {
+            //        timer = 0;
+            //        GameMaster.GM.playersTurn = false;
+            //    }
+            //}
         }
 
 
-            
+
         protected bool CanAttack(int direction)
         {
             bool isEnemy = false;
@@ -267,11 +286,11 @@ namespace LizardNight
             switch (direction)
             {
                 case 1:
-                    isEnemy = gridHandler.getCharGrid(positionX + 1, positionY) != null ? true : false; return isEnemy ; //right
+                    isEnemy = gridHandler.getCharGrid(positionX + 1, positionY) != null ? true : false; return isEnemy; //right
                 case 2:
                     isEnemy = gridHandler.getCharGrid(positionX - 1, positionY) != null ? true : false; return isEnemy; // left
                 case 3:
-                    isEnemy = gridHandler.getCharGrid(positionX , positionY +1) != null ? true : false; return isEnemy; //up
+                    isEnemy = gridHandler.getCharGrid(positionX, positionY + 1) != null ? true : false; return isEnemy; //up
                 case 4:
                     isEnemy = gridHandler.getCharGrid(positionX, positionY - 1) != null ? true : false; return isEnemy; //down
                 case 5:
@@ -309,27 +328,27 @@ namespace LizardNight
 
         protected void Attack(int direction)
         {
-           
+
 
 
             switch (direction)
             {
                 case 1:
                     gridHandler.getCharGrid(positionX + 1, positionY).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); ;
-                        break;
-                case 2:
-                   gridHandler.getCharGrid(positionX - 1, positionY).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); ;
                     break;
-                    case 3:
+                case 2:
+                    gridHandler.getCharGrid(positionX - 1, positionY).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); ;
+                    break;
+                case 3:
                     gridHandler.getCharGrid(positionX, positionY + 1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); ; ; break; //up
                 case 4:
                     gridHandler.getCharGrid(positionX, positionY - 1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); ; break; //down
                 case 5:
-                    gridHandler.getCharGrid(positionX + 1, positionY + 1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue);  break; //up right
+                    gridHandler.getCharGrid(positionX + 1, positionY + 1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); break; //up right
                 case 6:
-                    gridHandler.getCharGrid(positionX + 1, positionY + -1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue);  break; //down right
+                    gridHandler.getCharGrid(positionX + 1, positionY + -1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); break; //down right
                 case 7:
-                    gridHandler.getCharGrid(positionX + -1, positionY + 1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue);  break; //up left
+                    gridHandler.getCharGrid(positionX + -1, positionY + 1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); break; //up left
                 case 8:
                     gridHandler.getCharGrid(positionX + -1, positionY + -1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); break; //down left
             }
@@ -355,7 +374,8 @@ namespace LizardNight
             }
         }
 
-        public int GetCurrentHealth() {
+        public int GetCurrentHealth()
+        {
             var health = attributes.GetStat<Vital>(StatType.Health);
 
             return health.StatCurrentValue;
@@ -369,6 +389,16 @@ namespace LizardNight
 
         }
 
+        public void OnLevelUp(object sender, LevelChangeEventArgs args)
+        {
+            LevelUp();
+        }
 
+        protected void LevelUp()
+        {
+            var health = attributes.GetStat<Vital>(StatType.Health);
+            health.SetCurrentValueToMax();
+            Debug.Log("Level up");
+        }
     }
 }

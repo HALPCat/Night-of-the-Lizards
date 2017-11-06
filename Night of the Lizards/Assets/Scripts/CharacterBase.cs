@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +12,7 @@ namespace LizardNight
         public const string VerticalAxis = "Vertical";
         public const string DiagonalUpAxis = "Diagonal Up";
         public const string DiagonalDownAxis = "Diagonal Down";
+        public const string Wait = "Wait";
 
         //just for testing
         protected int health = 3;
@@ -28,6 +30,15 @@ namespace LizardNight
         //For checking what's on the map
         public GridHandler gridHandler;
 
+        //character level controller!
+        private CharLevel _charLevel;
+        
+
+        public CharLevel CharLevel
+        {
+            get { return _charLevel; }
+            set { _charLevel = value; }
+        }
 
         // Use this for initialization
         protected virtual void Start()
@@ -50,19 +61,21 @@ namespace LizardNight
 
         }
 
-        // Update is called once per frame
-        protected virtual void Update()
-        {
-           
-
-        }
-
         protected virtual void Awake()
         {
+            if (CharLevel == null)
+            {
+                CharLevel = GetComponent<CharLevel>();
+                if (CharLevel == null)
+                {
+                    Debug.LogWarning("No CharLevel assigned to Character");
+                }
+            }
 
-
-
+                            
         }
+
+        protected abstract void Update();
 
         protected abstract void Move();
 
@@ -147,5 +160,7 @@ namespace LizardNight
         {
             get { return positionY; }
         }
+
+        
     }
 }

@@ -14,7 +14,8 @@ namespace LizardNight
         //has seen player
         public bool triggered = false;
         //player position (if triggered)
-        GameObject target;
+
+        PlayerScript target;
         int targetY, targetX;
 
         //combat
@@ -33,17 +34,25 @@ namespace LizardNight
             get { return _stationary; }
         }
 
+        protected override void Awake()
+        {
+            attributes = GetComponent<EnemyOne>();
+            //base.Awake();
+        }
+
         // Use this for initialization
         protected override void Start()
         {
             //adds enemy to the game master list
             //GameMaster.GM.AddEnemy(this);
 
-            attributes = GetComponent<EnemyOne>();
 
             base.Start();
 
+            
+
         }
+
 
         // Update is called once per frame
         protected override void Update()
@@ -60,6 +69,7 @@ namespace LizardNight
             GameMaster.GM.RemoveEnemy(this);
         }
 
+
         void OnBecameVisible()
         {
             Debug.Log(this.name + " is now visible, enabling.");
@@ -67,53 +77,56 @@ namespace LizardNight
             GameMaster.GM.AddEnemy(this);
         }
 
+        //old bugged move
         protected override void Move()
         {
             //if not triggered, will move randomly
-            int dir = UnityEngine.Random.Range(1, 4);
+            int dir = UnityEngine.Random.Range(1, 8);
 
-            while (!canMove(dir))
+
+            if (canMove(dir))
             {
-                dir = UnityEngine.Random.Range(1, 4);
-            }
+                switch (dir)
+                {
+                    case 1:
+                        moveHorizontal(1);
+                        break;
+                    case 2:
+                        moveHorizontal(-1);
+                        break;
+                    case 3:
+                        moveVertical(1);
+                        break;
+                    case 4:
+                        moveVertical(-1);
+                        break;
+                    case 5:
+                        moveDiagonal(1, 1);
+                        break;
+                    case 6:
+                        moveDiagonal(1, -1);
+                        break;
+                    case 7:
+                        moveDiagonal(-1, 1);
+                        break;
+                    case 8:
+                        moveDiagonal(-1, -1);
+                        break;
 
-            switch (dir)
-            {
-                case 1:
-                    moveHorizontal(1);
-                    break;
-                case 2:
-                    moveHorizontal(-1);
-                    break;
-                case 3:
-                    moveVertical(1);
-                    break;
-                case 4:
-                    moveVertical(-1);
-                    break;
-                case 5:
-                    moveDiagonal(1, 1);
-                    break;
-                case 6:
-                    moveDiagonal(-1, 1);
-                    break;
-                case 7:
-                    moveDiagonal(1, -1);
-                    break;
-                case 8:
-                    moveDiagonal(-1, -1);
-                    break;
-
+                }
             }
+           
+            
         }
-
+               
         void OnTriggerEnter2D(Collider2D col)
         {
-           
+
             if (col.tag == "Player")
             {
                 triggered = true;
-                target = col.gameObject;
+                target = col.gameObject.GetComponent<PlayerScript>();
+
             }
 
 
@@ -129,7 +142,7 @@ namespace LizardNight
 
             if (!triggered)
             {
-                Move();  
+                Move();
             }
             //if triggered by player will pursue
             else
@@ -139,9 +152,11 @@ namespace LizardNight
 
 
             }
+
         }
 
-        
+
+
 
         public void Pursue(Vector3 newPos, bool pathSuccesfull, bool isTarget)
         {
@@ -162,8 +177,8 @@ namespace LizardNight
                     //Attack();
                 }
             }
+          
         }
-
         public void takeDamage(int damage)
         {
             var health = attributes.GetStat<Vital>(StatType.Health);
@@ -173,10 +188,11 @@ namespace LizardNight
             if (health.StatCurrentValue == 0)
             {
                 Debug.Log("You eat the delicious lizard meat of your enemy and recover ten points of health");
-                target.SendMessage("HealDamage", 10);
-                
+                target.SendMessage("HealDamage", 11);
+                target.CharLevel.ModifyExp(25);
+
                 Destroy(gameObject);
-                
+
             }
         }
 
@@ -184,7 +200,8 @@ namespace LizardNight
         {
             gridHandler.setNode(positionX, positionY, true);
             gridHandler.setCharGrid(positionX, positionY, null);
-           
+            //GameMaster.GM.RemoveEnemy(this);
+
         }
     }
 

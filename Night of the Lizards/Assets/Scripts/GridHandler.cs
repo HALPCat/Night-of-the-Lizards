@@ -24,6 +24,9 @@ namespace LizardNight {
         GameObject player;
         PlayerScript playerScript;
 
+        //addind this for enemy handling!! - ANTONIO
+       public GameMaster GM;
+
 
 
         //The dungeon generator that this grid handler uses for building dungeons
@@ -59,6 +62,7 @@ namespace LizardNight {
             tileGrid[x, y] = gameObject;
         }
         public void setCharGrid(int x, int y, GameObject gameObject) {
+            
             charGrid[x, y] = gameObject;
         }
 
@@ -79,6 +83,8 @@ namespace LizardNight {
             //Set the tileGrid and charGrid to be the given size
             tileGrid = new GameObject[dungeonWidth, dungeonHeight];
             charGrid = new GameObject[dungeonWidth, dungeonHeight];
+
+            GM = GetComponent<GameMaster>();
 
 
             // - - - - - - - - - - Begin dungeon generation - - - - - - - - - -

@@ -15,6 +15,7 @@ namespace LizardNight
         private List<BasicEnemy> enemies;
         private bool enemiesTurn;
 
+
         // Use this for initialization
         void Start()
         {
@@ -51,7 +52,7 @@ namespace LizardNight
         }
 
         //add the enemies to the list
-        public void AddEnemy (BasicEnemy enemy)
+        public void AddEnemy(BasicEnemy enemy)
         {
             enemies.Add(enemy);
         }
@@ -80,17 +81,26 @@ namespace LizardNight
             for (int i = 0; i < enemies.Count; i++)
             {
                 if (!enemies[i].stationary)
-                enemies[i].Movement();
+                    enemies[i].Movement();
 
                 yield return null;
             }
 
             //player can now move
-            playersTurn = true;
-
             enemiesTurn = false;
 
+            playersTurn = true;
+
         }
+        public void ClearEnemies()
+        {
+            foreach (BasicEnemy enemy in enemies)
+            {
+                enemies.Remove(enemy);
+                Destroy(enemy.gameObject);
+            }
+        }
+
     }
 
 }
