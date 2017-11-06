@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace LizardNight
 {
@@ -371,6 +372,7 @@ namespace LizardNight
             if (health.StatCurrentValue == 0)
             {
                 Destroy(gameObject);
+                SceneManager.LoadScene(0);
             }
         }
 
@@ -396,9 +398,14 @@ namespace LizardNight
 
         protected void LevelUp()
         {
-            var health = attributes.GetStat<Vital>(StatType.Health);
-            health.SetCurrentValueToMax();
-            Debug.Log("Level up");
+          // attributes.GetStat<Vital>(StatType.Health).ScaleStat(CharLevel.Level +1);
+           attributes.GetStat<Attribute>(StatType.Constitution).ScaleStat(CharLevel.Level);
+           attributes.GetStat<Attribute>(StatType.Strenght).ScaleStat(CharLevel.Level);
+           attributes.GetStat<Attribute>(StatType.Constitution).ScaleStat(CharLevel.Level);
+
+
+           attributes.GetStat<Vital>(StatType.Health).SetCurrentValueToMax();
+           Debug.Log("Level up");
         }
     }
 }

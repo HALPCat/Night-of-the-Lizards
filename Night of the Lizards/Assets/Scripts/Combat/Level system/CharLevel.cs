@@ -9,9 +9,9 @@ namespace LizardNight
     public abstract class CharLevel : MonoBehaviour
     {
         [SerializeField]
-        private int _level = 0;
+        private int _level = 1;
         [SerializeField]
-        private int _levelMin = 0;
+        private int _levelMin = 1;
         [SerializeField]
         private int _levelMax = 99;
 

@@ -188,7 +188,7 @@ namespace LizardNight
             if (health.StatCurrentValue == 0)
             {
                 Debug.Log("You eat the delicious lizard meat of your enemy and recover ten points of health");
-                target.SendMessage("HealDamage", 11);
+                target.SendMessage("HealDamage", 8);
                 target.CharLevel.ModifyExp(25);
 
                 Destroy(gameObject);
