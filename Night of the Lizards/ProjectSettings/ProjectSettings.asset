@@ -592,7 +592,7 @@ PlayerSettings:
   apiCompatibilityLevel: 2
   cloudProjectId: d19e9d57-3236-48b2-ae6f-05bd1c4152cc
   projectName: Night of the Lizards
-  organizationId: matias-bergstrom
+  organizationId: pet-lizards
   cloudEnabled: 0
   enableNativePlatformBackendsForNewInputSystem: 0
   disableOldInputManagerSupport: 0

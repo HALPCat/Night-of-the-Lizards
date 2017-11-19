@@ -6,17 +6,13 @@ using UnityEngine;
 namespace LizardNight {
 
     public class DungeonGenerator : MonoBehaviour {
-        public GridHandler gridHandler;
+
         [SerializeField]
         public int tunnelLength = 20;
+        
 
-
-        public List<Vector2> freeFloorPositions = new List<Vector2>();
-
-
-        void Start() {
-
-        }
+        List<Vector2> freeFloorPositions = new List<Vector2>();
+        Vector2[] potentialFloorPositions = new Vector2[16*16];
 
         public void UpdateFreeFloors(GameObject[,] grid) {
             int dungeonWidth = grid.GetLength(0);
@@ -72,16 +68,26 @@ namespace LizardNight {
             int dungeonWidth = grid.GetLength(0);
             int dungeonHeight = grid.GetLength(1);
 
+            //Middle of the dungeon coordinates
             int middleX = Mathf.RoundToInt(dungeonWidth / 2);
             int middleY = Mathf.RoundToInt(dungeonHeight / 2);
+
+            //Current coordinates of tunneler
             int currentX = middleX;
             int currentY = middleY;
+
+            //The tile in the middle of the dungeon is changed to a floor
             grid[middleX, middleY] = Resources.Load("Floor") as GameObject;
+
+            //Loop as long as tunnel length is achieved
             for (int i = 0; i < tunnelLength; i++) {
+                //validMove is false as long as tunneler lands on floor, turns true when landing on wall
                 bool validMove = false;
+                //Attempts increase when more valid moves are made
                 int attempts = 0;
 
                 while (!validMove) {
+                    //Generate a random direction to go to
                     //0 = up, 1 = right, 2 = down, 3 = left
                     int randDirection = (int)(Random.value * 4);
 
@@ -107,12 +113,18 @@ namespace LizardNight {
                         }
                     }
 
+                    //If landed tile was a wall, it was a valid move. Reset attempts
                     if (grid[currentX, currentY] == Resources.Load("Wall")) {
                         validMove = true;
                         attempts = 0;
-                    } else {
+                    }else {
+                        //Else increase attempts
+                        //Optimally this should reset curent position to a wall that can be tunneled into.
+                        
                         attempts++;
                     }
+
+                    //Exit loop if failed attempts are greater than given tunnel length times ten
                     if (attempts > tunnelLength * 10) {
                         Debug.LogError("Stopped generation after " + tunnelLength * 10 + " failed attempts.");
                         validMove = true;
@@ -123,6 +135,107 @@ namespace LizardNight {
                 grid[currentX, currentY] = Resources.Load("Floor") as GameObject;
             }
         }
+
+        /* Lots of shit on new type of generation, didn't go well
+        public void RandomListTunneler(GameObject[,] grid, int tunnelLength)
+        {
+            int dungeonWidth = grid.GetLength(0);
+            int dungeonHeight = grid.GetLength(1);
+
+            //Middle of the dungeon coordinates
+            int middleX = Mathf.RoundToInt(dungeonWidth / 2);
+            int middleY = Mathf.RoundToInt(dungeonHeight / 2);
+
+            //Current coordinates of tunneler
+            int currentX = middleX;
+            int currentY = middleY;
+
+            //The tile in the middle of the dungeon is changed to a floor
+            grid[middleX, middleY] = Resources.Load("Floor") as GameObject;
+
+            //Loop as long as tunnel length is achieved
+            for (int i = 0; i < tunnelLength; i++) {
+                UpdatePotentialFloors(grid);
+                Vector2 randomPotential = GetRandomPotentialFloor();
+                grid[(int)randomPotential.x, (int)randomPotential.y] = Resources.Load("Floor") as GameObject;
+            }
+        }
+
+        public Vector2 GetRandomPotentialFloor()
+        {
+            int rIndex = Random.Range(0, potentialFloorPositions.Length);
+            return potentialFloorPositions[rIndex];
+        }
+
+        public void UpdatePotentialFloors(GameObject[,] grid)
+        {
+            int dungeonWidth = grid.GetLength(0);
+            int dungeonHeight = grid.GetLength(1);
+            
+            //Clear array
+            for (int i = 0; i < potentialFloorPositions.Length; i++) {
+                potentialFloorPositions[0] = Vector2.zero;
+            }
+
+            int currentIndex = 0;
+
+            for (int i = 0; i < dungeonWidth; i++) {
+                for (int j = 0; j < dungeonHeight; j++) {
+                    //If we're at any corner of the dungeon
+                    if(i == 0 || j == 0 || i == dungeonWidth-1 || j == dungeonHeight-1) {
+                        //dont do shit
+                    }else {
+                        //Otherwise check if this is a wall
+                        if (grid[i, j] == Resources.Load("Wall")) {
+                            //If it's a wall check it's surroundings
+
+                            bool north = false;
+                            bool east = false;
+                            bool south = false;
+                            bool west = false;
+
+                            //If tile above is a floor
+                            //Debug.Log("Checking around " + i +", "+ j);
+                            if (grid[i, j + 1] == Resources.Load("Floor")) {
+                                
+                                north = true;
+                            }
+                            //If tile to the right is a floor
+                            if (grid[i+1,j] == Resources.Load("Floor")) {
+                                east = true;
+                            }
+                            //If tile below is a floor
+                            if (grid[i, j - 1] == Resources.Load("Floor")) {
+                                south = true;
+                            }
+                            //If tile to the left is a floor
+                            if (grid[i - 1, j] == Resources.Load("Floor")) {
+                                west = true;
+                            }
+                            
+                            //If any position contains floor
+                            if(north || east || south || west) {
+                                Debug.Log("currentIndex is " + currentIndex);
+                                potentialFloorPositions[currentIndex] = new Vector2(i, j);
+                            }
+                        }
+                    }
+                    currentIndex++;
+                }
+            }
+        }
+        */
+
+        /* Tile surround check, I'll think of this later
+        public bool CheckTileNorth(GameObject[,] grid, int tileX, int tileY, GameObject comparisonTarget)
+        {
+            if (grid[tileX, tileY+1] == comparisonTarget) {
+                return true;
+            }else {
+                return false;
+            }
+        }
+        */
 
         public void RemoveCorners(GameObject[,] grid) {
             int dungeonWidth = grid.GetLength(0);

@@ -383,6 +383,13 @@ namespace LizardNight
             return health.StatCurrentValue;
         }
 
+        public int GetMaxHealth()
+        {
+            var health = attributes.GetStat<Vital>(StatType.Health);
+
+            return health.StatBaseValue;
+        }
+
         public void HealDamage(int damage)
         {
             var health = attributes.GetStat<Vital>(StatType.Health);

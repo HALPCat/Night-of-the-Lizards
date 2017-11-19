@@ -69,7 +69,7 @@ namespace LizardNight
             foreach (StatLinker link in _statLinkers)
             {
                 _statLinkerValue += link.Value;
-                Debug.Log(_statLinkers.Count);
+                //Debug.Log(_statLinkers.Count);
             }
             TriggerValueChange();
         }

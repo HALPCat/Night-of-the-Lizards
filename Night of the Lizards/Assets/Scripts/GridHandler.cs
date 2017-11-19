@@ -65,6 +65,11 @@ namespace LizardNight {
             
             charGrid[x, y] = gameObject;
         }
+        public int getDungeonFloor()
+        {
+            return dungeonFloor;
+        }
+
 
         void Awake() {
             //Assigning dungeonGenerator a DungeonGenerator
