@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+
 namespace LizardNight
 {
 
@@ -13,15 +14,21 @@ namespace LizardNight
 
         //has seen player
         public bool triggered = false;
-        //player position (if triggered)
+        
+        public float dropRate;
+
+        public GameObject lifePowerup, atackPowerUp, defensePowerUp;
+        int _level;
 
         PlayerScript target;
         int targetY, targetX;
+        
 
         //combat
         EnemyOne attributes;
+       
+      
         //pathfinding
-
         Vector3 path;
         int targetIndex;
 
@@ -37,6 +44,7 @@ namespace LizardNight
         protected override void Awake()
         {
             attributes = GetComponent<EnemyOne>();
+          
             //base.Awake();
         }
 
@@ -45,11 +53,11 @@ namespace LizardNight
         {
             //adds enemy to the game master list
             //GameMaster.GM.AddEnemy(this);
-
+            
 
             base.Start();
 
-            
+
 
         }
 
@@ -60,6 +68,26 @@ namespace LizardNight
 
 
 
+        }
+
+       public void InitializeAttributes (int level)
+        {
+            constitution = attributes.GetStat<Attribute>(StatType.Constitution);
+            strenght = attributes.GetStat<Attribute>(StatType.Strenght);
+            physDamage = attributes.GetStat<Attribute>(StatType.PhysDamage);
+            vitalHealth = attributes.GetStat<Vital>(StatType.Health);
+
+            SetLevel(level);
+        }
+
+        //used to set enemy level, on creation!!
+       public void SetLevel (int level)
+        {
+             _level = level;
+            constitution.ScaleStat(level -1);
+            strenght.ScaleStat(level -1);
+
+            vitalHealth.SetCurrentValueToMax();
         }
 
         void OnBecameInvisible()
@@ -115,10 +143,10 @@ namespace LizardNight
 
                 }
             }
-           
-            
+
+
         }
-               
+
         void OnTriggerEnter2D(Collider2D col)
         {
 
@@ -173,35 +201,48 @@ namespace LizardNight
                 }
                 else
                 {
-                    target.GetComponent<PlayerScript>().takeDamage(attributes.GetStat<Attribute>(StatType.PhysDamage).StatValue);
+                    target.GetComponent<PlayerScript>().takeDamage(physDamage.StatValue);
                     //Attack();
                 }
             }
-          
+
         }
         public void takeDamage(int damage)
         {
-            var health = attributes.GetStat<Vital>(StatType.Health);
-            health.StatCurrentValue -= damage;
-            Debug.Log("Enemy Health is " + health.StatCurrentValue);
+          
+            vitalHealth.StatCurrentValue -= damage;
+            Debug.Log("Enemy Health is " + vitalHealth.StatCurrentValue);
 
-            if (health.StatCurrentValue == 0)
+            if (vitalHealth.StatCurrentValue == 0)
             {
-                Debug.Log("You eat the delicious lizard meat of your enemy and recover ten points of health");
-                target.SendMessage("HealDamage", 8);
-                target.CharLevel.ModifyExp(25);
-
+                target.CharLevel.ModifyExp(20 + 5 * _level);
+                Drop();
                 Destroy(gameObject);
-
             }
+        }
+
+        private void Drop()
+        {
+            float dropChance = UnityEngine.Random.Range(0.0f, 1);
+            if (dropChance < dropRate)
+            {
+                int drop = UnityEngine.Random.Range(0, 6);
+                if (drop <= 3)
+                    Instantiate(lifePowerup, transform.position - new Vector3(0, 0.5f, 0), transform.rotation);
+                if (drop == 4)
+                    Instantiate(atackPowerUp, transform.position - new Vector3(0, 0.5f, 0), transform.rotation);
+                if (drop == 5)
+                    Instantiate(defensePowerUp, transform.position - new Vector3(0, 0.5f, 0), transform.rotation);
+            }
+
         }
 
         public void OnDestroy()
         {
+
             gridHandler.setNode(positionX, positionY, true);
             gridHandler.setCharGrid(positionX, positionY, null);
-            //GameMaster.GM.RemoveEnemy(this);
-
+            
         }
     }
 
