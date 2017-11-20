@@ -112,7 +112,7 @@ namespace LizardNight {
             dungeonGenerator.RemoveCorners(tileGrid);                                   //Removes corners that make diagonals look weird
             dungeonGenerator.PlaceStairs(tileGrid);                                     //Places stairs on the floor
             dungeonGenerator.UpdateFreeFloors(tileGrid);                                //Used for finding spots for the enemies
-            dungeonGenerator.SpawnEnemies(tileGrid, (GameObject)Resources.Load("Enemy"), 10);   //Places enemies
+            dungeonGenerator.SpawnEnemies(tileGrid, (GameObject)Resources.Load("Enemy"), 10, dungeonFloor);   //Places enemies
             dungeonGenerator.BuildDungeon(tileGrid);                                    //Instantiates the gameobjects in tileGrid
             StartCoroutine(TimerTest());
 

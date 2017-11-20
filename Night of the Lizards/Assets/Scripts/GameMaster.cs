@@ -13,7 +13,9 @@ namespace LizardNight
         public float turnTimer = 0.1f;
 
         private List<BasicEnemy> enemies;
-        private bool enemiesTurn;
+        private bool enemiesTurn, paused = false;
+
+        public Canvas pauseScreen;
 
 
         // Use this for initialization
@@ -25,10 +27,20 @@ namespace LizardNight
         // Update is called once per frame
         void Update()
         {
-            if (playersTurn || enemiesTurn)
-                return;
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                Debug.Log("pressed escape");
+                paused = !paused;
+                pauseScreen.gameObject.SetActive(paused);
+            }
+            if (!paused)
+            {
+                if (playersTurn || enemiesTurn)
+                    return;
 
-            StartCoroutine(EnemyTurn());
+                StartCoroutine(EnemyTurn());
+
+            }
 
         }
 

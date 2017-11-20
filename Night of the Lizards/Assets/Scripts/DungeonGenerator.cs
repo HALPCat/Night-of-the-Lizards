@@ -3,49 +3,61 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace LizardNight {
+namespace LizardNight
+{
 
-    public class DungeonGenerator : MonoBehaviour {
+    public class DungeonGenerator : MonoBehaviour
+    {
 
         [SerializeField]
         public int tunnelLength = 20;
-        
+
 
         List<Vector2> freeFloorPositions = new List<Vector2>();
-        Vector2[] potentialFloorPositions = new Vector2[16*16];
+        Vector2[] potentialFloorPositions = new Vector2[16 * 16];
 
-        public void UpdateFreeFloors(GameObject[,] grid) {
+        public void UpdateFreeFloors(GameObject[,] grid)
+        {
             int dungeonWidth = grid.GetLength(0);
             int dungeonHeight = grid.GetLength(1);
 
             freeFloorPositions.Clear();
 
-            for (int i = 0; i < dungeonWidth; i++) {
-                for (int j = 0; j < dungeonHeight; j++) {
-                    if(grid[i,j] == Resources.Load("Floor")) {
+            for (int i = 0; i < dungeonWidth; i++)
+            {
+                for (int j = 0; j < dungeonHeight; j++)
+                {
+                    if (grid[i, j] == Resources.Load("Floor"))
+                    {
                         freeFloorPositions.Add(new Vector2(i, j));
                     }
                 }
             }
         }
 
-        public void BuildDungeon(GameObject[,] grid) {
+        public void BuildDungeon(GameObject[,] grid)
+        {
             int dungeonWidth = grid.GetLength(0);
             int dungeonHeight = grid.GetLength(1);
-            for (int i = 0; i < dungeonWidth; i++) {
-                for (int j = 0; j < dungeonHeight; j++) {
+            for (int i = 0; i < dungeonWidth; i++)
+            {
+                for (int j = 0; j < dungeonHeight; j++)
+                {
                     //Create a tile in the grid in corresponding coordinates
                     grid[i, j] = Instantiate(grid[i, j], new Vector3(transform.position.x + i, transform.position.y + j), Quaternion.identity);
                 }
             }
         }
 
-        public void DestroyDungeon(GameObject[,] grid) {
+        public void DestroyDungeon(GameObject[,] grid)
+        {
             int dungeonWidth = grid.GetLength(0);
             int dungeonHeight = grid.GetLength(1);
             GameObject currentTile;
-            for (int i = 0; i < dungeonWidth; i++) {
-                for (int j = 0; j < dungeonHeight; j++) {
+            for (int i = 0; i < dungeonWidth; i++)
+            {
+                for (int j = 0; j < dungeonHeight; j++)
+                {
                     currentTile = grid[i, j];
                     //Destroy(currentTile);
                     Destroy(grid[i, j]);
@@ -53,18 +65,22 @@ namespace LizardNight {
             }
         }
 
-        public void FillGrid(GameObject[,] grid, GameObject tileType) {
+        public void FillGrid(GameObject[,] grid, GameObject tileType)
+        {
             int dungeonWidth = grid.GetLength(0);
             int dungeonHeight = grid.GetLength(1);
 
-            for (int i = 0; i < dungeonWidth; i++) {
-                for (int j = 0; j < dungeonHeight; j++) {
+            for (int i = 0; i < dungeonWidth; i++)
+            {
+                for (int j = 0; j < dungeonHeight; j++)
+                {
                     grid[i, j] = tileType;
                 }
             }
         }
 
-        public void RandomTunneler(GameObject[,] grid, int tunnelLength) {
+        public void RandomTunneler(GameObject[,] grid, int tunnelLength)
+        {
             int dungeonWidth = grid.GetLength(0);
             int dungeonHeight = grid.GetLength(1);
 
@@ -80,52 +96,69 @@ namespace LizardNight {
             grid[middleX, middleY] = Resources.Load("Floor") as GameObject;
 
             //Loop as long as tunnel length is achieved
-            for (int i = 0; i < tunnelLength; i++) {
+            for (int i = 0; i < tunnelLength; i++)
+            {
                 //validMove is false as long as tunneler lands on floor, turns true when landing on wall
                 bool validMove = false;
                 //Attempts increase when more valid moves are made
                 int attempts = 0;
 
-                while (!validMove) {
+                while (!validMove)
+                {
                     //Generate a random direction to go to
                     //0 = up, 1 = right, 2 = down, 3 = left
                     int randDirection = (int)(Random.value * 4);
 
-                    if (randDirection == 0) {
+                    if (randDirection == 0)
+                    {
                         currentY++;
-                        if (currentY == dungeonHeight - 1) {
+                        if (currentY == dungeonHeight - 1)
+                        {
                             currentY--;
                         }
-                    } else if (randDirection == 1) {
+                    }
+                    else if (randDirection == 1)
+                    {
                         currentX++;
-                        if (currentX == dungeonWidth - 1) {
+                        if (currentX == dungeonWidth - 1)
+                        {
                             currentX--;
                         }
-                    } else if (randDirection == 2) {
+                    }
+                    else if (randDirection == 2)
+                    {
                         currentY--;
-                        if (currentY == 0) {
+                        if (currentY == 0)
+                        {
                             currentY++;
                         }
-                    } else if (randDirection == 3) {
+                    }
+                    else if (randDirection == 3)
+                    {
                         currentX--;
-                        if (currentX == 0) {
+                        if (currentX == 0)
+                        {
                             currentX++;
                         }
                     }
 
                     //If landed tile was a wall, it was a valid move. Reset attempts
-                    if (grid[currentX, currentY] == Resources.Load("Wall")) {
+                    if (grid[currentX, currentY] == Resources.Load("Wall"))
+                    {
                         validMove = true;
                         attempts = 0;
-                    }else {
+                    }
+                    else
+                    {
                         //Else increase attempts
                         //Optimally this should reset curent position to a wall that can be tunneled into.
-                        
+
                         attempts++;
                     }
 
                     //Exit loop if failed attempts are greater than given tunnel length times ten
-                    if (attempts > tunnelLength * 10) {
+                    if (attempts > tunnelLength * 10)
+                    {
                         Debug.LogError("Stopped generation after " + tunnelLength * 10 + " failed attempts.");
                         validMove = true;
                         i = tunnelLength;
@@ -237,7 +270,8 @@ namespace LizardNight {
         }
         */
 
-        public void RemoveCorners(GameObject[,] grid) {
+        public void RemoveCorners(GameObject[,] grid)
+        {
             int dungeonWidth = grid.GetLength(0);
             int dungeonHeight = grid.GetLength(1);
 
@@ -249,30 +283,40 @@ namespace LizardNight {
             bool cornersExist = true;
             int loops = 0;
 
-            while (cornersExist) {
+            while (cornersExist)
+            {
                 int corners = 0; //Amount of found corners
 
-                for (int i = 1; i < dungeonWidth - 1; i++) {
-                    for (int j = 1; j < dungeonHeight - 1; j++) {
+                for (int i = 1; i < dungeonWidth - 1; i++)
+                {
+                    for (int j = 1; j < dungeonHeight - 1; j++)
+                    {
                         //Check surroundings
-                        if (grid[i, j] == (GameObject)Resources.Load("Wall")) {
+                        if (grid[i, j] == (GameObject)Resources.Load("Wall"))
+                        {
                             sWest = true;
                         }
-                        if (grid[i + 1, j] == (GameObject)Resources.Load("Wall")) {
+                        if (grid[i + 1, j] == (GameObject)Resources.Load("Wall"))
+                        {
                             sEast = true;
                         }
-                        if (grid[i, j + 1] == (GameObject)Resources.Load("Wall")) {
+                        if (grid[i, j + 1] == (GameObject)Resources.Load("Wall"))
+                        {
                             nWest = true;
                         }
-                        if (grid[i + 1, j + 1] == (GameObject)Resources.Load("Wall")) {
+                        if (grid[i + 1, j + 1] == (GameObject)Resources.Load("Wall"))
+                        {
                             nEast = true;
                         }
 
-                        if (nEast && sWest && !nWest && !sEast) {
+                        if (nEast && sWest && !nWest && !sEast)
+                        {
                             Debug.Log("Case found at " + i + "," + j + "!");
                             grid[i, j] = Resources.Load("Floor") as GameObject;
                             corners++;
-                        } else if (nWest && sEast && !nEast && !sWest) {
+                        }
+                        else if (nWest && sEast && !nEast && !sWest)
+                        {
                             Debug.Log("Case found at " + i + "," + j + "!");
                             grid[i + 1, j] = Resources.Load("Floor") as GameObject;
                             corners++;
@@ -286,7 +330,8 @@ namespace LizardNight {
                 }
 
                 loops++;
-                if(corners == 0) {
+                if (corners == 0)
+                {
                     cornersExist = false;
                 }
             }
@@ -294,7 +339,8 @@ namespace LizardNight {
             Debug.Log("RemoveCorners() ran through " + loops + " loops before completing.");
         }
 
-        public void PlaceStairs(GameObject[,] grid) {
+        public void PlaceStairs(GameObject[,] grid)
+        {
             int dungeonWidth = grid.GetLength(0);
             int dungeonHeight = grid.GetLength(1);
 
@@ -303,49 +349,78 @@ namespace LizardNight {
             bool downStairPlaced = false;
             bool upStairPlaced = false;
 
-            while (!downStairPlaced) {
+            while (!downStairPlaced)
+            {
                 randX = Random.Range(0, dungeonWidth);
                 randY = Random.Range(0, dungeonHeight);
 
-                if (grid[randX, randY] == Resources.Load("Floor")) {
+                if (grid[randX, randY] == Resources.Load("Floor"))
+                {
                     grid[randX, randY] = Resources.Load("StairsDown") as GameObject;
                     downStairPlaced = true;
                 }
             }
 
-            while (!upStairPlaced) {
+            while (!upStairPlaced)
+            {
                 randX = Random.Range(0, dungeonWidth);
                 randY = Random.Range(0, dungeonHeight);
 
-                if (grid[randX, randY] == Resources.Load("Floor")) {
+                if (grid[randX, randY] == Resources.Load("Floor"))
+                {
                     grid[randX, randY] = Resources.Load("StairsUp") as GameObject;
                     upStairPlaced = true;
                 }
             }
         }
 
-        public void SpawnEnemy(GameObject[,] grid, GameObject enemyPrefab, Vector2 position) {
-            GameObject enemy; 
+        //public void SpawnEnemy(GameObject[,] grid, GameObject enemyPrefab, Vector2 position)
+        //{
+        //    SpawnEnemy(grid, enemyPrefab, position, 1);
+        //}
+
+        public void SpawnEnemy(GameObject[,] grid, GameObject enemyPrefab, Vector2 position, int level)
+        {
+            GameObject enemy;
             enemy = Instantiate(enemyPrefab, position, Quaternion.identity);
+
+            BasicEnemy enemySheet = enemy.GetComponent<BasicEnemy>();
+
+            if (enemySheet != null)
+            {
+                enemySheet.InitializeAttributes(level);
+            }
         }
 
-        public void SpawnEnemies(GameObject[,] grid, GameObject enemyPrefab, int amount) {
-            for (int i = 0; i < amount; i++) {
+        public void SpawnEnemies(GameObject[,] grid, GameObject enemyPrefab, int amount)
+        {
+            SpawnEnemies(grid, enemyPrefab, amount, 1);
+        }
+
+
+        public void SpawnEnemies(GameObject[,] grid, GameObject enemyPrefab, int amount, int level)
+        {
+            for (int i = 0; i < amount; i++)
+            {
                 int rand = Random.Range(0, freeFloorPositions.Count);
-                SpawnEnemy(grid, enemyPrefab, freeFloorPositions[rand]);
+                SpawnEnemy(grid, enemyPrefab, freeFloorPositions[rand], level);
                 freeFloorPositions.RemoveAt(rand);
             }
         }
 
-        public void DestroyEnemies() {
-            foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("enemy")){
+        public void DestroyEnemies()
+        {
+            foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("enemy"))
+            {
                 Destroy(enemy);
             }
         }
 
-        public void FloorCountDebugger(){
-            for (int i = 0; i < freeFloorPositions.Count; i++) {
-                Debug.Log("freeFloorPositions[" + i + "] = "  + freeFloorPositions[i]);
+        public void FloorCountDebugger()
+        {
+            for (int i = 0; i < freeFloorPositions.Count; i++)
+            {
+                Debug.Log("freeFloorPositions[" + i + "] = " + freeFloorPositions[i]);
             }
         }
 

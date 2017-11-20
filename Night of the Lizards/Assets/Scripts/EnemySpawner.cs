@@ -2,22 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemySpawner : MonoBehaviour {
+namespace LizardNight
+{
+    public class EnemySpawner : MonoBehaviour
+    {
 
-    [SerializeField]
+        [SerializeField]
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
+        // Use this for initialization
+        void Start()
+        {
 
-	}
+        }
 
-    void spawnEnemy(GameObject enemyPrefab) {
-        GameObject enemy;
-        enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+
+        void spawnEnemy(GameObject enemyPrefab)
+        {
+            spawnEnemy(enemyPrefab, 1);
+        }
+
+        void spawnEnemy(GameObject enemyPrefab, int level)
+        {
+            GameObject enemy;
+            enemy = Instantiate(enemyPrefab, transform.position, Quaternion.identity);
+
+            BasicEnemy enemySheet = enemy.GetComponent<BasicEnemy>();
+
+            enemySheet.SetLevel(level);
+                       
+        }
     }
 }

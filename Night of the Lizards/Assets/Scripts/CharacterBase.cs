@@ -14,8 +14,9 @@ namespace LizardNight
         public const string DiagonalDownAxis = "Diagonal Down";
         public const string Wait = "Wait";
 
-        //just for testing
-        protected int health = 3;
+       
+        protected Attribute constitution, strenght, physDamage, armor;
+        protected Vital vitalHealth;
 
         //Poisition variables
         [SerializeField]

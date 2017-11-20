@@ -15,10 +15,9 @@ namespace LizardNight
         float timer = 0.25f;
 
         //the character sheet
-        BaseClass attributes;
-
-
-
+       public BaseClass attributes;
+       
+      
 
         public int PositionX { get { return positionX; } }
         public int PositionY { get { return positionY; } }
@@ -29,9 +28,9 @@ namespace LizardNight
         protected override void Awake()
         {
             attributes = GetComponent<BaseClass>();
+            initiateStats();
 
             base.Awake();
-
             CharLevel.OnCharLevelUp += OnLevelUp;
 
         }
@@ -278,7 +277,14 @@ namespace LizardNight
             //}
         }
 
-
+        protected void initiateStats()
+        {
+            constitution = attributes.GetStat<Attribute>(StatType.Constitution);
+            strenght = attributes.GetStat<Attribute>(StatType.Strenght);
+            physDamage = attributes.GetStat<Attribute>(StatType.PhysDamage);
+            vitalHealth = attributes.GetStat<Vital>(StatType.Health);
+            armor = attributes.GetStat<Attribute>(StatType.ArmorClass);
+        }
 
         protected bool CanAttack(int direction)
         {
@@ -335,41 +341,36 @@ namespace LizardNight
             switch (direction)
             {
                 case 1:
-                    gridHandler.getCharGrid(positionX + 1, positionY).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); ;
+                    gridHandler.getCharGrid(positionX + 1, positionY).SendMessage("takeDamage", physDamage.StatValue); ;
                     break;
                 case 2:
-                    gridHandler.getCharGrid(positionX - 1, positionY).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); ;
+                    gridHandler.getCharGrid(positionX - 1, positionY).SendMessage("takeDamage", physDamage.StatValue); ;
                     break;
                 case 3:
-                    gridHandler.getCharGrid(positionX, positionY + 1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); ; ; break; //up
+                    gridHandler.getCharGrid(positionX, positionY + 1).SendMessage("takeDamage", physDamage.StatValue); ; ; break; //up
                 case 4:
-                    gridHandler.getCharGrid(positionX, positionY - 1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); ; break; //down
+                    gridHandler.getCharGrid(positionX, positionY - 1).SendMessage("takeDamage", physDamage.StatValue); ; break; //down
                 case 5:
-                    gridHandler.getCharGrid(positionX + 1, positionY + 1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); break; //up right
+                    gridHandler.getCharGrid(positionX + 1, positionY + 1).SendMessage("takeDamage", physDamage.StatValue); break; //up right
                 case 6:
-                    gridHandler.getCharGrid(positionX + 1, positionY + -1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); break; //down right
+                    gridHandler.getCharGrid(positionX + 1, positionY + -1).SendMessage("takeDamage", physDamage.StatValue); break; //down right
                 case 7:
-                    gridHandler.getCharGrid(positionX + -1, positionY + 1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); break; //up left
+                    gridHandler.getCharGrid(positionX + -1, positionY + 1).SendMessage("takeDamage", physDamage.StatValue); break; //up left
                 case 8:
-                    gridHandler.getCharGrid(positionX + -1, positionY + -1).SendMessage("takeDamage", attributes.GetStat<Attribute>(StatType.PhysDamage).StatBaseValue); break; //down left
+                    gridHandler.getCharGrid(positionX + -1, positionY + -1).SendMessage("takeDamage", physDamage.StatValue); break; //down left
             }
             GameMaster.GM.playersTurn = false;
         }
 
-        private void theEnd()
-        {
-            if (health <= 0)
-                GameMaster.GM.GameOver();
-        }
-
         public void takeDamage(int damage)
         {
-            var health = attributes.GetStat<Vital>(StatType.Health);
-            //add armor class and damage reduction
-            health.StatCurrentValue -= damage;
-            Debug.Log("Player Health is " + health.StatCurrentValue);
+            int finalDamage = damage - armor.StatValue;
+            if (finalDamage < 1)
+                finalDamage = 1;
+            vitalHealth.StatCurrentValue -= finalDamage;
+            Debug.Log("Player Health is " + vitalHealth.StatCurrentValue);
 
-            if (health.StatCurrentValue == 0)
+            if (vitalHealth.StatCurrentValue == 0)
             {
                 Destroy(gameObject);
                 SceneManager.LoadScene(0);
@@ -378,9 +379,7 @@ namespace LizardNight
 
         public int GetCurrentHealth()
         {
-            var health = attributes.GetStat<Vital>(StatType.Health);
-
-            return health.StatCurrentValue;
+            return vitalHealth.StatCurrentValue;
         }
 
         public int GetMaxHealth()
@@ -392,9 +391,8 @@ namespace LizardNight
 
         public void HealDamage(int damage)
         {
-            var health = attributes.GetStat<Vital>(StatType.Health);
-            health.StatCurrentValue += damage;
-            Debug.Log("Health is " + health.StatCurrentValue);
+            vitalHealth.StatCurrentValue += damage;
+            Debug.Log("Health is " + vitalHealth.StatCurrentValue);
 
         }
 
@@ -405,14 +403,26 @@ namespace LizardNight
 
         protected void LevelUp()
         {
-          // attributes.GetStat<Vital>(StatType.Health).ScaleStat(CharLevel.Level +1);
-           attributes.GetStat<Attribute>(StatType.Constitution).ScaleStat(CharLevel.Level);
-           attributes.GetStat<Attribute>(StatType.Strenght).ScaleStat(CharLevel.Level);
-           attributes.GetStat<Attribute>(StatType.Constitution).ScaleStat(CharLevel.Level);
 
+            constitution.ScaleStat(CharLevel.Level);
+            strenght.ScaleStat(CharLevel.Level);
 
-           attributes.GetStat<Vital>(StatType.Health).SetCurrentValueToMax();
-           Debug.Log("Level up");
+            vitalHealth.SetCurrentValueToMax();
+            Debug.Log("Level up");
+        }
+
+        public void AttackPowerUp(float damageBonus)
+        {
+            physDamage.AddModifier(new StatModTotalAdd(damageBonus + physDamage.StatModifierValue));
+            physDamage.UpdateModifiers();
+
+        }
+
+        public void DefensePowerUp(float armorLevel)
+        {
+            armor.AddModifier(new StatModTotalAdd(armorLevel + armor.StatModifierValue));
+            armor.UpdateModifiers();
+
         }
     }
 }

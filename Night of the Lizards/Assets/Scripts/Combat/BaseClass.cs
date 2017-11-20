@@ -17,6 +17,8 @@ namespace LizardNight
         int Damage = 1;
         [SerializeField]
         int Strenght = 5;
+        [SerializeField]
+        int Armor = 0;
 
         protected override void ConfigureStats()
         {
@@ -34,9 +36,11 @@ namespace LizardNight
 
             var physDamage = CreateOrGetStat<Attribute>(StatType.PhysDamage);
             physDamage.SetStat("Physical Damage", 1);
-            physDamage.AddLinker(new LinkerBasic(CreateOrGetStat<Attribute>(StatType.Strenght), 3));
+            physDamage.AddLinker(new LinkerBasic(CreateOrGetStat<Attribute>(StatType.Strenght), 2));
             physDamage.UpdateLinkers();
 
+            var armor = CreateOrGetStat<Attribute>(StatType.ArmorClass);
+            armor.SetStat("Armor", Armor);
 
 
         }
@@ -48,31 +52,6 @@ namespace LizardNight
                 
             }
         }
-
-
-
-
-        //protected override void ConfigureStats()
-        //{
-        //    var constitution = CreateOrGetStat<Attribute>(StatType.Constitution);
-        //    constitution.SetStat("Constitution", 10);
-
-        //    var wisdom = CreateOrGetStat<Attribute>(StatType.Wisdom);
-        //    wisdom.SetStat("Wisdom", 5);
-
-        //    var health = CreateOrGetStat<Vital>(StatType.Health);
-        //    health.SetStat("Health", 100);
-        //    health.AddLinker(new LinkerBasic(CreateOrGetStat<Attribute>(StatType.Constitution), 10));
-        //    health.UpdateLinkers();
-        //    health.SetCurrentValueToMax();
-
-        //    var mana = CreateOrGetStat<Vital>(StatType.Mana);
-        //    mana.SetStat("Mana", 10);
-        //    mana.AddLinker(new LinkerBasic(CreateOrGetStat<Attribute>(StatType.Wisdom), 10));
-        //    mana.UpdateLinkers();
-        //    mana.SetCurrentValueToMax();
-
-        //}
-
+      
     }
 }
