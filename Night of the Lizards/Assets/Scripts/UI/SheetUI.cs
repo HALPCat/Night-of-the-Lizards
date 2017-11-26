@@ -31,7 +31,7 @@ namespace LizardNight
             text2b.text = playerLevel.ExpCurrent + "/" + playerLevel.ExpRequired;
             text3a.text = "Health: ";
             text3b.text = playerScript.GetCurrentHealth() + "/" + playerScript.GetMaxHealth();
-            text4a.text = "Strenght: ";
+            text4a.text = "Strength: ";
             text4b.text = "" + playerAttributes.GetStat<Attribute>(StatType.Strenght).StatValue;
             text5a.text = "Constitution: ";
             text5b.text = "" + playerAttributes.GetStat<Attribute>(StatType.Constitution).StatValue;

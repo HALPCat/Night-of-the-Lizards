@@ -27,7 +27,7 @@ GameObject:
   - component: {fileID: 61634155649091508}
   m_Layer: 0
   m_Name: Power-up DEF
-  m_TagString: Untagged
+  m_TagString: power up
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -118,6 +118,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5a9c890f21c1d2418ad0e758f64270e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playSound: 1
   armorLevel: 1
 --- !u!114 &114562640392006728
 MonoBehaviour:
@@ -130,6 +131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ee37b040723f9d4dbf4dcf1e9b8571d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playSound: 0
   healthToHeal: 5
 --- !u!212 &212927165358216290
 SpriteRenderer:

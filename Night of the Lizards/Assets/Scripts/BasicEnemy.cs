@@ -111,6 +111,7 @@ namespace LizardNight
             //if not triggered, will move randomly
             int dir = UnityEngine.Random.Range(1, 8);
 
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
 
             if (canMove(dir))
             {
@@ -118,9 +119,11 @@ namespace LizardNight
                 {
                     case 1:
                         moveHorizontal(1);
+                        sr.flipX = false;
                         break;
                     case 2:
                         moveHorizontal(-1);
+                        sr.flipX = true;
                         break;
                     case 3:
                         moveVertical(1);
@@ -130,15 +133,19 @@ namespace LizardNight
                         break;
                     case 5:
                         moveDiagonal(1, 1);
+                        sr.flipX = false;
                         break;
                     case 6:
                         moveDiagonal(1, -1);
+                        sr.flipX = false;
                         break;
                     case 7:
                         moveDiagonal(-1, 1);
+                        sr.flipX = true;
                         break;
                     case 8:
                         moveDiagonal(-1, -1);
+                        sr.flipX = true;
                         break;
 
                 }
@@ -193,7 +200,16 @@ namespace LizardNight
                 if (!isTarget)
                 {
                     updateLastPosition();
-                    transform.Translate(new Vector3(newPos.x - positionX, newPos.y - positionY));
+                    Vector3 movementVector = new Vector3(newPos.x - positionX, newPos.y - positionY);
+                    transform.Translate(movementVector);
+                    //Animation stuff
+                    SpriteRenderer sr = GetComponent<SpriteRenderer>();
+                    if (movementVector.x < 0) {
+                        sr.flipX = true;
+                    }else {
+                        sr.flipX = false;
+                    }
+
                     //Debug.Log("New Position is: " + newPos);
                     positionX = (int)transform.position.x;
                     positionY = (int)transform.position.y;
@@ -201,8 +217,17 @@ namespace LizardNight
                 }
                 else
                 {
+                    //Animation
+                    Vector3 movementVector = new Vector3(newPos.x - positionX, newPos.y - positionY);
+                    SpriteRenderer sr = GetComponent<SpriteRenderer>();
+                    if (movementVector.x < 0) {
+                        sr.flipX = true;
+                    } else {
+                        sr.flipX = false;
+                    }
+
+                    //Attack
                     target.GetComponent<PlayerScript>().takeDamage(physDamage.StatValue);
-                    //Attack();
                 }
             }
 
@@ -212,6 +237,9 @@ namespace LizardNight
           
             vitalHealth.StatCurrentValue -= damage;
             Debug.Log("Enemy Health is " + vitalHealth.StatCurrentValue);
+
+            //Audio
+            Instantiate(Resources.Load("HitSoundPlayer"));
 
             if (vitalHealth.StatCurrentValue == 0)
             {

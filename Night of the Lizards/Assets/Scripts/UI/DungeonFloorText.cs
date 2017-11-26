@@ -21,7 +21,11 @@ namespace LizardNight
         // Update is called once per frame
         void Update()
         {
-            dungeonFloorText.text = "Dungeon Floor: " + gridHandler.getDungeonFloor();
+            if(gridHandler.getDungeonFloor() == 0) {
+                dungeonFloorText.text = "Tutorial Floor";
+            }else {
+                dungeonFloorText.text = "Dungeon Floor: " + gridHandler.getDungeonFloor();
+            }
         }
     }
 }

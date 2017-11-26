@@ -7,9 +7,12 @@ namespace LizardNight
 
     public abstract class PowerUp : MonoBehaviour
     {
+        [SerializeField]
+        bool playSound = true;
+
         Rigidbody2D _rigidbody;
 
-               private void Awake()
+        private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
         }
@@ -19,6 +22,11 @@ namespace LizardNight
         {
             if (collision.gameObject.tag == "Player")
             {
+                //Audio
+                if (playSound) {
+                    Instantiate(Resources.Load("PowerUpSoundPlayer"));
+                }
+
                 PowerUpPlayer(collision.gameObject);
                 Destroy(gameObject);
             }

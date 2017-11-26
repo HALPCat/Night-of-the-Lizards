@@ -166,6 +166,7 @@ namespace LizardNight
                 }
             }
 
+            //Using stairs
             if (Input.GetButtonDown("Jump"))
             {
                 stairsDown = GameObject.Find("StairsDown(Clone)");
@@ -175,6 +176,7 @@ namespace LizardNight
                 }
             }
 
+            //Going up right
             else if (Input.GetAxis(DiagonalUpAxis) > 0)
             {
                 int direction = 5;
@@ -197,8 +199,11 @@ namespace LizardNight
                     GameMaster.GM.playersTurn = false;
                 }
             }
+
+            //Going up left
             else if (Input.GetAxis(DiagonalUpAxis) < 0)
             {
+                //sr.flipX = true;
                 int direction = 7;
 
                 if (!canMove(direction))
@@ -219,8 +224,11 @@ namespace LizardNight
                     GameMaster.GM.playersTurn = false;
                 }
             }
+
+            //Going down right
             else if (Input.GetAxis(DiagonalDownAxis) > 0)
             {
+                //sr.flipX = false;
                 int direction = 6;
 
                 if (!canMove(direction))
@@ -241,8 +249,11 @@ namespace LizardNight
                     GameMaster.GM.playersTurn = false;
                 }
             }
+
+            //Going down left
             else if (Input.GetAxis(DiagonalDownAxis) < 0)
             {
+                //sr.flipX = true;
                 int direction = 8;
 
                 if (!canMove(direction))
@@ -335,7 +346,7 @@ namespace LizardNight
 
         protected void Attack(int direction)
         {
-
+            
 
 
             switch (direction)
@@ -369,6 +380,11 @@ namespace LizardNight
                 finalDamage = 1;
             vitalHealth.StatCurrentValue -= finalDamage;
             Debug.Log("Player Health is " + vitalHealth.StatCurrentValue);
+
+            //Audio
+            AudioSource attackAudio = GetComponent<AudioSource>();
+            attackAudio.pitch = UnityEngine.Random.Range(0.75f, 1.25f);
+            attackAudio.Play();
 
             if (vitalHealth.StatCurrentValue == 0)
             {

@@ -94,7 +94,7 @@ namespace LizardNight {
 
             // - - - - - - - - - - Begin dungeon generation - - - - - - - - - -
 
-            NewFloor();
+            LoadTutorialStage();
 
             // - - - - - - - - - - End dungeon generation - - - - - - - - - -
 
@@ -106,22 +106,36 @@ namespace LizardNight {
 
         public void NewFloor() {
             dungeonGenerator.DestroyEnemies();
+            dungeonGenerator.DestroyPowerUps();
             dungeonGenerator.DestroyDungeon(tileGrid);
             dungeonGenerator.FillGrid(tileGrid, Resources.Load("Wall") as GameObject);  //Fills the entire floor with walls
             dungeonGenerator.RandomTunneler(tileGrid, dungeonGenerator.tunnelLength);   //Creates a tunnel on the floor
             dungeonGenerator.RemoveCorners(tileGrid);                                   //Removes corners that make diagonals look weird
-            dungeonGenerator.PlaceStairs(tileGrid);                                     //Places stairs on the floor
+            dungeonGenerator.PlaceRandomStairs(tileGrid);                                     //Places stairs on the floor
             dungeonGenerator.UpdateFreeFloors(tileGrid);                                //Used for finding spots for the enemies
             dungeonGenerator.SpawnEnemies(tileGrid, (GameObject)Resources.Load("Enemy"), 10, dungeonFloor);   //Places enemies
             dungeonGenerator.BuildDungeon(tileGrid);                                    //Instantiates the gameobjects in tileGrid
-            StartCoroutine(TimerTest());
+            StartCoroutine(TelePlayerBeginning());
 
             CreateNodeGrid();
             fillCharGrid();
 
             dungeonFloor++;
         }
-        IEnumerator TimerTest() {
+
+        public void LoadTutorialStage()
+        {
+            dungeonGenerator.DestroyEnemies();
+            dungeonGenerator.DestroyPowerUps();
+            dungeonGenerator.DestroyDungeon(tileGrid);
+            dungeonGenerator.LoadLevel(tileGrid, "tutorial");
+            dungeonGenerator.BuildDungeon(tileGrid);                                    //Instantiates the gameobjects in tileGrid
+            StartCoroutine(TelePlayerBeginning());
+            CreateNodeGrid();
+            fillCharGrid();
+        }
+
+        IEnumerator TelePlayerBeginning() {
             yield return new WaitForEndOfFrame();
 
             playerScript.teleportToBeginning();

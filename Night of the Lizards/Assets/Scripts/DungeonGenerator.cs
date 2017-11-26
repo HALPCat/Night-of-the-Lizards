@@ -339,7 +339,7 @@ namespace LizardNight
             Debug.Log("RemoveCorners() ran through " + loops + " loops before completing.");
         }
 
-        public void PlaceStairs(GameObject[,] grid)
+        public void PlaceRandomStairs(GameObject[,] grid)
         {
             int dungeonWidth = grid.GetLength(0);
             int dungeonHeight = grid.GetLength(1);
@@ -374,11 +374,6 @@ namespace LizardNight
             }
         }
 
-        //public void SpawnEnemy(GameObject[,] grid, GameObject enemyPrefab, Vector2 position)
-        //{
-        //    SpawnEnemy(grid, enemyPrefab, position, 1);
-        //}
-
         public void SpawnEnemy(GameObject[,] grid, GameObject enemyPrefab, Vector2 position, int level)
         {
             GameObject enemy;
@@ -396,8 +391,7 @@ namespace LizardNight
         {
             SpawnEnemies(grid, enemyPrefab, amount, 1);
         }
-
-
+        
         public void SpawnEnemies(GameObject[,] grid, GameObject enemyPrefab, int amount, int level)
         {
             for (int i = 0; i < amount; i++)
@@ -416,11 +410,58 @@ namespace LizardNight
             }
         }
 
+        public void DestroyPowerUps()
+        {
+            foreach(GameObject powerUp in GameObject.FindGameObjectsWithTag("power up"))
+            {
+                Destroy(powerUp);
+            }
+        }
+
         public void FloorCountDebugger()
         {
             for (int i = 0; i < freeFloorPositions.Count; i++)
             {
                 Debug.Log("freeFloorPositions[" + i + "] = " + freeFloorPositions[i]);
+            }
+        }
+
+        public void LoadLevel(GameObject[,] grid, string levelName)
+        {
+            if (levelName.Equals("tutorial")) {
+                FillGrid(grid, Resources.Load("Wall") as GameObject);
+                Vector2[] floorTiles = { new Vector2(14, 19), new Vector2(16, 19), new Vector2(18, 19), 
+                                         new Vector2(13, 18), new Vector2(14, 18), new Vector2(15, 18), new Vector2(16, 18), new Vector2(17, 18), new Vector2(18, 18), new Vector2(19, 18), new Vector2(20, 18),
+                                         new Vector2(14, 17), new Vector2(20, 17),
+                                         new Vector2(13, 16), new Vector2(14, 16), new Vector2(20, 16),
+                                         new Vector2(14, 15), new Vector2(20, 15),
+                                         new Vector2(13, 14), new Vector2(14, 14), new Vector2(15, 14), new Vector2(16, 14), new Vector2(18, 14), new Vector2(19, 14), new Vector2(20, 14),
+                                         new Vector2(14, 13), new Vector2(15, 13), new Vector2(16, 13), new Vector2(18, 13), new Vector2(19, 13), new Vector2(20, 13)
+                                        };
+                /*
+                 * Vector2[] floorTiles = { new Vector2(14, 13), new Vector2(16, 13), new Vector2(18, 13), 
+                                         new Vector2(13, 14), new Vector2(14, 14), new Vector2(15, 14), new Vector2(16, 14), new Vector2(17, 14), new Vector2(18, 14), new Vector2(19, 14), new Vector2(20, 14),
+                                         new Vector2(14, 15), new Vector2(20, 15),
+                                         new Vector2(13, 16), new Vector2(14, 16), new Vector2(20, 16),
+                                         new Vector2(14, 17), new Vector2(20, 17),
+                                         new Vector2(13, 18), new Vector2(14, 18), new Vector2(15, 18), new Vector2(16, 18), new Vector2(18, 18), new Vector2(19, 18), new Vector2(20, 18),
+                                         new Vector2(14, 19), new Vector2(16, 19), new Vector2(18, 19), new Vector2(19, 19), new Vector2(20, 19)
+                                        };
+                */
+
+                //Place floors
+                for (int i = 0; i < floorTiles.Length; i++) {
+                    grid[(int)floorTiles[i].x, (int)floorTiles[i].y] = Resources.Load("Floor") as GameObject;
+                }
+
+                //Stairs
+                grid[15, 14] = Resources.Load("StairsUp") as GameObject;
+                grid[18, 13] = Resources.Load("StairsDown") as GameObject;
+
+                //Enemies
+                SpawnEnemy(grid, Resources.Load("Enemy") as GameObject, new Vector2(20, 14), -1);
+            } else {
+                Debug.Log("No level named \"" + levelName + "\" exists!");
             }
         }
 
@@ -442,5 +483,5 @@ namespace LizardNight
             }
         }
         */
-    }
-}
+            }
+        }

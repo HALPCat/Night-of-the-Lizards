@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: 6029060564720544db36eecf9f390c27
-timeCreated: 1508448797
+timeCreated: 1511708580
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -80,10 +80,10 @@ TextureImporter:
       name: enemy_idle_0
       rect:
         serializedVersion: 2
-        x: 62
-        y: 33
-        width: 115
-        height: 127
+        x: 0
+        y: 0
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -94,10 +94,10 @@ TextureImporter:
       name: enemy_idle_1
       rect:
         serializedVersion: 2
-        x: 319
-        y: 33
-        width: 118
-        height: 121
+        x: 256
+        y: 0
+        width: 256
+        height: 256
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

@@ -109,7 +109,6 @@ namespace LizardNight
 
         protected void moveVertical(int tiles)
         {
-
             updateLastPosition();
             transform.Translate(new Vector3(0, tiles));
             positionY = (int)transform.position.y;
@@ -118,6 +117,13 @@ namespace LizardNight
         }
         protected void moveHorizontal(int tiles)
         {
+            //For flipping sprite and animations
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            if (tiles < 0) {
+                sr.flipX = true;
+            } else {
+                sr.flipX = false;
+            }
 
             updateLastPosition();
             transform.Translate(new Vector3(tiles, 0));
@@ -129,6 +135,13 @@ namespace LizardNight
 
         protected void moveDiagonal(int tileX, int tileY)
         {
+            //For flipping sprite and animations
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            if (tileX < 0) {
+                sr.flipX = true;
+            } else {
+                sr.flipX = false;
+            }
 
             updateLastPosition();
             transform.Translate(new Vector3(tileX, tileY));
