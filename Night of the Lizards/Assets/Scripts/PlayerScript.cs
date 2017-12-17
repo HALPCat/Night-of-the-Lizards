@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 namespace LizardNight
 {
@@ -15,12 +16,18 @@ namespace LizardNight
         float timer = 0.25f;
 
         //the character sheet
-       public BaseClass attributes;
-       
-      
+        public BaseClass attributes;
+        public string playerName = "no name";
 
+        int kills = 0;
+        int floor = 0;
         public int PositionX { get { return positionX; } }
         public int PositionY { get { return positionY; } }
+
+        public GameObject deathCanvas;
+        public bool paused;
+
+        List<Scores> highScores;
 
         GameObject stairsDown;
         [SerializeField]
@@ -33,6 +40,11 @@ namespace LizardNight
             base.Awake();
             CharLevel.OnCharLevelUp += OnLevelUp;
 
+
+            highScores = HighScoreManager._instance.GetHighScore();
+
+            paused = false;
+
         }
         protected override void Update()
         {
@@ -41,7 +53,6 @@ namespace LizardNight
                 return;
 
             Move();
-
 
         }
 
@@ -64,228 +75,232 @@ namespace LizardNight
 
         protected override void Move()
         {
-            //Going up
-            if (Input.GetAxisRaw(VerticalAxis) > 0)
+            if (!paused)
             {
+                //Going up
+                if (Input.GetAxisRaw(VerticalAxis) > 0)
+                {
 
-                int direction = 3;
+                    int direction = 3;
 
-                if (!canMove(direction))
-                    if (CanAttack(direction))
+                    if (!canMove(direction))
+                        if (CanAttack(direction))
+                        {
+                            Attack(direction);
+                        }
+                    if (canMove(direction))
                     {
-                        Attack(direction);
+
+                        moveVertical(1);
+                        timer = 0;
+                        GameMaster.GM.playersTurn = false;
                     }
-                if (canMove(direction))
-                {
-
-                    moveVertical(1);
-                    timer = 0;
-                    GameMaster.GM.playersTurn = false;
-                }
-                timer += Time.deltaTime;
-                if (timer >= 0.25f && canMove(3))
-                {
-                    moveVertical(1);
-                    timer = 0;
-                    GameMaster.GM.playersTurn = false;
-                }
-            }
-
-            //Going down
-            else if (Input.GetAxisRaw(VerticalAxis) < 0)
-            {
-                int direction = 4;
-
-                if (!canMove(direction))
-                    if (CanAttack(direction))
+                    timer += Time.deltaTime;
+                    if (timer >= 0.25f && canMove(3))
                     {
-                        Attack(direction);
+                        moveVertical(1);
+                        timer = 0;
+                        GameMaster.GM.playersTurn = false;
                     }
-                if (canMove(direction))
-                {
-                    moveVertical(-1);
-                    timer = 0;
-                    GameMaster.GM.playersTurn = false;
                 }
-                timer += Time.deltaTime;
-                if (timer >= 0.25f && canMove(4))
+
+                //Going down
+                else if (Input.GetAxisRaw(VerticalAxis) < 0)
                 {
-                    moveVertical(-1);
-                    timer = 0;
-                    GameMaster.GM.playersTurn = false;
-                }
-            }
+                    int direction = 4;
 
-            //Going left
-            else if (Input.GetAxisRaw(HorizontalAxis) < 0)
-            {
-                int direction = 2;
-
-                if (!canMove(direction))
-                    if (CanAttack(direction))
+                    if (!canMove(direction))
+                        if (CanAttack(direction))
+                        {
+                            Attack(direction);
+                        }
+                    if (canMove(direction))
                     {
-                        Attack(direction);
+                        moveVertical(-1);
+                        timer = 0;
+                        GameMaster.GM.playersTurn = false;
                     }
-                if (canMove(direction))
-                {
-                    moveHorizontal(-1);
-                    timer = 0;
-                    GameMaster.GM.playersTurn = false;
-                }
-                timer += Time.deltaTime;
-                if (timer >= 0.25f && canMove(2))
-                {
-                    moveHorizontal(-1);
-                    timer = 0;
-                    GameMaster.GM.playersTurn = false;
-                }
-            }
-
-            //Going right
-            else if (Input.GetAxisRaw(HorizontalAxis) > 0)
-            {
-                int direction = 1;
-
-                if (!canMove(direction))
-                    if (CanAttack(direction))
+                    timer += Time.deltaTime;
+                    if (timer >= 0.25f && canMove(4))
                     {
-                        Attack(direction);
+                        moveVertical(-1);
+                        timer = 0;
+                        GameMaster.GM.playersTurn = false;
                     }
-                if (canMove(direction))
-                {
-                    moveHorizontal(1);
-                    timer = 0;
-                    GameMaster.GM.playersTurn = false;
                 }
-                timer += Time.deltaTime;
-                if (timer >= 0.25f && canMove(1))
+
+                //Going left
+                else if (Input.GetAxisRaw(HorizontalAxis) < 0)
                 {
-                    moveHorizontal(1);
-                    timer = 0;
-                    GameMaster.GM.playersTurn = false;
-                }
-            }
+                    int direction = 2;
 
-            //Using stairs
-            if (Input.GetButtonDown("Jump"))
-            {
-                stairsDown = GameObject.Find("StairsDown(Clone)");
-                if (transform.position == stairsDown.transform.position)
-                {
-                    gridHandler.NewFloor();
-                }
-            }
-
-            //Going up right
-            else if (Input.GetAxis(DiagonalUpAxis) > 0)
-            {
-                int direction = 5;
-
-                if (!canMove(direction))
-                    if (CanAttack(direction))
+                    if (!canMove(direction))
+                        if (CanAttack(direction))
+                        {
+                            Attack(direction);
+                        }
+                    if (canMove(direction))
                     {
-                        Attack(direction);
+                        moveHorizontal(-1);
+                        timer = 0;
+                        GameMaster.GM.playersTurn = false;
                     }
-                if (canMove(direction))
-                {
-                    moveDiagonal(1, 1);
-                    timer = 0;
-                    GameMaster.GM.playersTurn = false;
-                }
-                if (timer >= 0.25f && canMove(5))
-                {
-                    moveDiagonal(1, 1);
-                    timer = 0;
-                    GameMaster.GM.playersTurn = false;
-                }
-            }
-
-            //Going up left
-            else if (Input.GetAxis(DiagonalUpAxis) < 0)
-            {
-                //sr.flipX = true;
-                int direction = 7;
-
-                if (!canMove(direction))
-                    if (CanAttack(direction))
+                    timer += Time.deltaTime;
+                    if (timer >= 0.25f && canMove(2))
                     {
-                        Attack(direction);
+                        moveHorizontal(-1);
+                        timer = 0;
+                        GameMaster.GM.playersTurn = false;
                     }
-                if (canMove(direction))
-                {
-                    moveDiagonal(-1, 1);
-                    timer = 0;
-                    GameMaster.GM.playersTurn = false;
                 }
-                if (timer >= 0.25f && canMove(7))
+
+                //Going right
+                else if (Input.GetAxisRaw(HorizontalAxis) > 0)
                 {
-                    moveDiagonal(-1, 1);
-                    timer = 0;
-                    GameMaster.GM.playersTurn = false;
-                }
-            }
+                    int direction = 1;
 
-            //Going down right
-            else if (Input.GetAxis(DiagonalDownAxis) > 0)
-            {
-                //sr.flipX = false;
-                int direction = 6;
-
-                if (!canMove(direction))
-                    if (CanAttack(direction))
+                    if (!canMove(direction))
+                        if (CanAttack(direction))
+                        {
+                            Attack(direction);
+                        }
+                    if (canMove(direction))
                     {
-                        Attack(direction);
+                        moveHorizontal(1);
+                        timer = 0;
+                        GameMaster.GM.playersTurn = false;
                     }
-                if (canMove(direction))
-                {
-                    moveDiagonal(1, -1);
-                    timer = 0;
-                    GameMaster.GM.playersTurn = false;
-                }
-                if (timer >= 0.25f && canMove(6))
-                {
-                    moveDiagonal(1, -1);
-                    timer = 0;
-                    GameMaster.GM.playersTurn = false;
-                }
-            }
-
-            //Going down left
-            else if (Input.GetAxis(DiagonalDownAxis) < 0)
-            {
-                //sr.flipX = true;
-                int direction = 8;
-
-                if (!canMove(direction))
-                    if (CanAttack(direction))
+                    timer += Time.deltaTime;
+                    if (timer >= 0.25f && canMove(1))
                     {
-                        Attack(direction);
+                        moveHorizontal(1);
+                        timer = 0;
+                        GameMaster.GM.playersTurn = false;
                     }
-                if (canMove(direction))
-                {
-                    moveDiagonal(-1, -1);
-                    timer = 0;
-                    GameMaster.GM.playersTurn = false;
                 }
-                if (timer >= 0.25f && canMove(8))
+
+                //Using stairs
+                if (Input.GetButtonDown("Jump"))
                 {
-                    moveDiagonal(-1, -1);
-                    timer = 0;
-                    GameMaster.GM.playersTurn = false;
+                    stairsDown = GameObject.Find("StairsDown(Clone)");
+                    if (transform.position == stairsDown.transform.position)
+                    {
+                        floor++;
+                        gridHandler.NewFloor();
+                    }
                 }
+
+                //Going up right
+                else if (Input.GetAxis(DiagonalUpAxis) > 0)
+                {
+                    int direction = 5;
+
+                    if (!canMove(direction))
+                        if (CanAttack(direction))
+                        {
+                            Attack(direction);
+                        }
+                    if (canMove(direction))
+                    {
+                        moveDiagonal(1, 1);
+                        timer = 0;
+                        GameMaster.GM.playersTurn = false;
+                    }
+                    if (timer >= 0.25f && canMove(5))
+                    {
+                        moveDiagonal(1, 1);
+                        timer = 0;
+                        GameMaster.GM.playersTurn = false;
+                    }
+                }
+
+                //Going up left
+                else if (Input.GetAxis(DiagonalUpAxis) < 0)
+                {
+                    //sr.flipX = true;
+                    int direction = 7;
+
+                    if (!canMove(direction))
+                        if (CanAttack(direction))
+                        {
+                            Attack(direction);
+                        }
+                    if (canMove(direction))
+                    {
+                        moveDiagonal(-1, 1);
+                        timer = 0;
+                        GameMaster.GM.playersTurn = false;
+                    }
+                    if (timer >= 0.25f && canMove(7))
+                    {
+                        moveDiagonal(-1, 1);
+                        timer = 0;
+                        GameMaster.GM.playersTurn = false;
+                    }
+                }
+
+                //Going down right
+                else if (Input.GetAxis(DiagonalDownAxis) > 0)
+                {
+                    //sr.flipX = false;
+                    int direction = 6;
+
+                    if (!canMove(direction))
+                        if (CanAttack(direction))
+                        {
+                            Attack(direction);
+                        }
+                    if (canMove(direction))
+                    {
+                        moveDiagonal(1, -1);
+                        timer = 0;
+                        GameMaster.GM.playersTurn = false;
+                    }
+                    if (timer >= 0.25f && canMove(6))
+                    {
+                        moveDiagonal(1, -1);
+                        timer = 0;
+                        GameMaster.GM.playersTurn = false;
+                    }
+                }
+
+                //Going down left
+                else if (Input.GetAxis(DiagonalDownAxis) < 0)
+                {
+                    //sr.flipX = true;
+                    int direction = 8;
+
+                    if (!canMove(direction))
+                        if (CanAttack(direction))
+                        {
+                            Attack(direction);
+                        }
+                    if (canMove(direction))
+                    {
+                        moveDiagonal(-1, -1);
+                        timer = 0;
+                        GameMaster.GM.playersTurn = false;
+                    }
+                    if (timer >= 0.25f && canMove(8))
+                    {
+                        moveDiagonal(-1, -1);
+                        timer = 0;
+                        GameMaster.GM.playersTurn = false;
+                    }
+                }
+
+                //else if (Input.GetAxis(Wait) >0)
+                //{
+                //    timer = 0;
+                //    GameMaster.GM.playersTurn = false;
+
+                //    if (timer >= 0.25f)
+                //    {
+                //        timer = 0;
+                //        GameMaster.GM.playersTurn = false;
+                //    }
+                //}
             }
-
-            //else if (Input.GetAxis(Wait) >0)
-            //{
-            //    timer = 0;
-            //    GameMaster.GM.playersTurn = false;
-
-            //    if (timer >= 0.25f)
-            //    {
-            //        timer = 0;
-            //        GameMaster.GM.playersTurn = false;
-            //    }
-            //}
         }
 
         protected void initiateStats()
@@ -346,7 +361,7 @@ namespace LizardNight
 
         protected void Attack(int direction)
         {
-            
+
 
 
             switch (direction)
@@ -388,9 +403,16 @@ namespace LizardNight
 
             if (vitalHealth.StatCurrentValue == 0)
             {
-                Destroy(gameObject);
-                SceneManager.LoadScene(0);
+                paused = true;
+                Instantiate(deathCanvas);
             }
+        }
+
+
+        public void SaveScore()
+        {
+            HighScoreManager._instance.SaveHighScore(playerName, floor, kills);
+            Debug.Log(HighScoreManager._instance.GetHighScore());
         }
 
         public int GetCurrentHealth()
@@ -439,6 +461,23 @@ namespace LizardNight
             armor.AddModifier(new StatModTotalAdd(armorLevel + armor.StatModifierValue));
             armor.UpdateModifiers();
 
+        }
+
+        public void AddKill()
+        {
+            kills++;
+        }
+
+        public int GetKills
+        {
+            get { return kills; }
+        }
+
+        public void Die()
+        {
+            SaveScore();
+            Destroy(gameObject);
+            SceneManager.LoadScene(0);
         }
     }
 }

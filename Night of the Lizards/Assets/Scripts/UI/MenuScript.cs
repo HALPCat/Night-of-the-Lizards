@@ -11,7 +11,17 @@ public class MenuScript : MonoBehaviour {
         SceneManager.LoadScene(levelName);
     }
 
+    public void HighScore()
+    {
+        SceneManager.LoadScene("HighScores");
+    }
+
     public void QuitGame() {
         Application.Quit();
+    }
+
+    public void MainMenu()
+    {
+        SceneManager.LoadScene("MainMenu");
     }
 }

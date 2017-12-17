@@ -29,9 +29,8 @@ namespace LizardNight
         {
             if (Input.GetKeyDown(KeyCode.Escape))
             {
-                Debug.Log("pressed escape");
-                paused = !paused;
-                pauseScreen.gameObject.SetActive(paused);
+                PauseGame();
+              
             }
             if (!paused)
             {
@@ -42,6 +41,12 @@ namespace LizardNight
 
             }
 
+        }
+
+        public void PauseGame()
+        {
+            paused = !paused;
+            pauseScreen.gameObject.SetActive(paused);
         }
 
         //in teh end

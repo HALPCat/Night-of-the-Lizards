@@ -243,6 +243,7 @@ namespace LizardNight
 
             if (vitalHealth.StatCurrentValue == 0)
             {
+                target.AddKill();
                 target.CharLevel.ModifyExp(20 + 5 * _level);
                 Drop();
                 Destroy(gameObject);
