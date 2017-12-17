@@ -45,7 +45,7 @@ namespace LizardNight
         protected override void Awake()
         {
             attributes = GetComponent<EnemyOne>();
-                        
+
             //base.Awake();
         }
 
@@ -287,18 +287,28 @@ namespace LizardNight
 
         private void Drop()
         {
-            float dropChance = UnityEngine.Random.Range(0.0f, 1);
-            if (dropChance < dropRate)
+            if (attributes.isBoss)
             {
-                int drop = UnityEngine.Random.Range(0, 6);
-                if (drop <= 3)
-                    Instantiate(lifePowerup, transform.position - new Vector3(0, 0.5f, 0), transform.rotation);
-                if (drop == 4)
-                    Instantiate(atackPowerUp, transform.position - new Vector3(0, 0.5f, 0), transform.rotation);
-                if (drop == 5)
-                    Instantiate(defensePowerUp, transform.position - new Vector3(0, 0.5f, 0), transform.rotation);
-            }
+                Instantiate(lifePowerup, transform.position - new Vector3(0, 0.5f, 0), transform.rotation);
+                Instantiate(atackPowerUp, transform.position - new Vector3(1, 0.5f, 0), transform.rotation);
+                Instantiate(defensePowerUp, transform.position - new Vector3(-1, 0.5f, 0), transform.rotation);
 
+            }
+            else
+            {
+                float dropChance = UnityEngine.Random.Range(0.0f, 1);
+                if (dropChance < dropRate)
+                {
+                    int drop = UnityEngine.Random.Range(0, 6);
+                    if (drop <= 3)
+                        Instantiate(lifePowerup, transform.position - new Vector3(0, 0.5f, 0), transform.rotation);
+                    if (drop == 4)
+                        Instantiate(atackPowerUp, transform.position - new Vector3(0, 0.5f, 0), transform.rotation);
+                    if (drop == 5)
+                        Instantiate(defensePowerUp, transform.position - new Vector3(0, 0.5f, 0), transform.rotation);
+                }
+
+            }
         }
 
         public void OnDestroy()

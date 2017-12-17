@@ -62,7 +62,7 @@ namespace LizardNight
             {
                 for (i = 1; i <= HighScores.Count && i <= LeaderboardLength; i++)
                 {
-                    if (floor > HighScores[i - 1].floor)
+                    if (floor > HighScores[i - 1].floor || floor == HighScores[i - 1].floor && kills > HighScores[i - 1].kills)
                     {
                         Scores _temp = new Scores();
                         _temp.name = name;
@@ -70,7 +70,8 @@ namespace LizardNight
                         _temp.kills = kills;
                         HighScores.Insert(i - 1, _temp);
                         break;
-                    }
+                    }                    
+
                     if (i == HighScores.Count && i < LeaderboardLength)
                     {
                         Scores _temp = new Scores();
