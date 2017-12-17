@@ -27,7 +27,14 @@ namespace LizardNight {
             //playerScript = FindObjectOfType(typeof(PlayerScript)) as PlayerScript;
 
             wallX = (int)transform.position.x;
-            wallY = (int)transform.position.y - 1;
+            //If not a swamp, put the top tile a bit up
+            if (!gridHandler.getFloorType().Equals("swamp")) {
+                wallY = (int)transform.position.y - 1;
+            }
+            //Exactly on top if a swamp
+            else {
+                wallY = (int)transform.position.y;
+            }
         }
 
         // Use this for initialization
@@ -96,9 +103,31 @@ namespace LizardNight {
             }
             */
             if (north) {
-                this.GetComponent<SpriteRenderer>().sprite = topPieces[7];
+                //Bedroom
+                if (gridHandler.getFloorType().Equals("bedroom")) {
+                    this.GetComponent<SpriteRenderer>().sprite = topPieces[0];
+                }
+                //Swamp
+                else if (gridHandler.getFloorType().Equals("swamp")) {
+                    this.GetComponent<SpriteRenderer>().sprite = topPieces[2];
+                }
+                //Disco
+                else {
+                    this.GetComponent<SpriteRenderer>().sprite = topPieces[4];
+                }
             } else {
-                this.GetComponent<SpriteRenderer>().sprite = topPieces[8];
+                //Bedroom
+                if (gridHandler.getFloorType().Equals("bedroom")) {
+                    this.GetComponent<SpriteRenderer>().sprite = topPieces[1];
+                }
+                //Swamp
+                else if (gridHandler.getFloorType().Equals("swamp")) {
+                    this.GetComponent<SpriteRenderer>().sprite = topPieces[3];
+                }
+                //Disco
+                else {
+                    this.GetComponent<SpriteRenderer>().sprite = topPieces[5];
+                }
             }
 
         }
