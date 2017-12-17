@@ -15,6 +15,7 @@ namespace LizardNight {
         private int dungeonHeight = 10;
         
         private int dungeonFloor = 0;
+        private string floorType = "tutorial";
 
         //Grid for dungeon tiles
         private GameObject[,] tileGrid;
@@ -69,6 +70,10 @@ namespace LizardNight {
         {
             return dungeonFloor;
         }
+        public string getFloorType()
+        {
+            return floorType;
+        }
 
 
         void Awake() {
@@ -94,7 +99,7 @@ namespace LizardNight {
 
             // - - - - - - - - - - Begin dungeon generation - - - - - - - - - -
 
-            LoadTutorialStage();
+            LoadStage("tutorial");
 
             // - - - - - - - - - - End dungeon generation - - - - - - - - - -
 
@@ -105,30 +110,55 @@ namespace LizardNight {
         }
 
         public void NewFloor() {
+
+            dungeonFloor++;
+
+            //Boss every 5th level
+            if (dungeonFloor % 5 == 0) {
+                floorType = "boss";
+                LoadStage("boss");
+                Debug.Log("boss floor, " + dungeonFloor % 5);
+            }
+            //Swamp from 5 and up
+            else if(dungeonFloor > 5) {
+                floorType = "swamp";
+                LoadNewFloor();
+                Debug.Log("swamp floor");
+            }
+            //Bedroom
+            else {
+                floorType = "bedroom";
+                LoadNewFloor();
+                Debug.Log("bedroom floor");
+            }
+            
+        }
+
+        public void LoadNewFloor()
+        {
             dungeonGenerator.DestroyEnemies();
             dungeonGenerator.DestroyPowerUps();
             dungeonGenerator.DestroyDungeon(tileGrid);
             dungeonGenerator.FillGrid(tileGrid, Resources.Load("Wall") as GameObject);  //Fills the entire floor with walls
             dungeonGenerator.RandomTunneler(tileGrid, dungeonGenerator.tunnelLength);   //Creates a tunnel on the floor
             dungeonGenerator.RemoveCorners(tileGrid);                                   //Removes corners that make diagonals look weird
-            dungeonGenerator.PlaceRandomStairs(tileGrid);                                     //Places stairs on the floor
+            dungeonGenerator.PlaceRandomStairs(tileGrid);                                //Places stairs on the floor
             dungeonGenerator.UpdateFreeFloors(tileGrid);                                //Used for finding spots for the enemies
             dungeonGenerator.SpawnEnemies(tileGrid, (GameObject)Resources.Load("Enemy"), 10, dungeonFloor);   //Places enemies
             dungeonGenerator.BuildDungeon(tileGrid);                                    //Instantiates the gameobjects in tileGrid
+
             StartCoroutine(TelePlayerBeginning());
 
             CreateNodeGrid();
             fillCharGrid();
-
-            dungeonFloor++;
         }
 
-        public void LoadTutorialStage()
+        public void LoadStage(string stageName)
         {
             dungeonGenerator.DestroyEnemies();
             dungeonGenerator.DestroyPowerUps();
             dungeonGenerator.DestroyDungeon(tileGrid);
-            dungeonGenerator.LoadLevel(tileGrid, "tutorial");
+            dungeonGenerator.LoadLevel(tileGrid, stageName);
             dungeonGenerator.BuildDungeon(tileGrid);                                    //Instantiates the gameobjects in tileGrid
             StartCoroutine(TelePlayerBeginning());
             CreateNodeGrid();
