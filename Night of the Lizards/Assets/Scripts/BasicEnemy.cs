@@ -14,7 +14,7 @@ namespace LizardNight
 
         //has seen player
         public bool triggered = false;
-        
+
         public float dropRate;
 
         public GameObject lifePowerup, atackPowerUp, defensePowerUp;
@@ -22,12 +22,12 @@ namespace LizardNight
 
         PlayerScript target;
         int targetY, targetX;
-        
+
 
         //combat
         EnemyOne attributes;
-       
-      
+
+
         //pathfinding
         Vector3 path;
         int targetIndex;
@@ -39,12 +39,13 @@ namespace LizardNight
         public bool stationary
         {
             get { return _stationary; }
+            set { _stationary = value; }
         }
 
         protected override void Awake()
         {
             attributes = GetComponent<EnemyOne>();
-          
+                        
             //base.Awake();
         }
 
@@ -53,7 +54,7 @@ namespace LizardNight
         {
             //adds enemy to the game master list
             //GameMaster.GM.AddEnemy(this);
-            
+
 
             base.Start();
 
@@ -70,7 +71,7 @@ namespace LizardNight
 
         }
 
-       public void InitializeAttributes (int level)
+        public void InitializeAttributes(int level)
         {
             constitution = attributes.GetStat<Attribute>(StatType.Constitution);
             strenght = attributes.GetStat<Attribute>(StatType.Strenght);
@@ -81,11 +82,11 @@ namespace LizardNight
         }
 
         //used to set enemy level, on creation!!
-       public void SetLevel (int level)
+        public void SetLevel(int level)
         {
-             _level = level;
-            constitution.ScaleStat(level -1);
-            strenght.ScaleStat(level -1);
+            _level = level;
+            constitution.ScaleStat(level - 1);
+            strenght.ScaleStat(level - 1);
 
             vitalHealth.SetCurrentValueToMax();
         }
@@ -108,6 +109,7 @@ namespace LizardNight
         //old bugged move
         protected override void Move()
         {
+
             //if not triggered, will move randomly
             int dir = UnityEngine.Random.Range(1, 8);
 
@@ -148,6 +150,7 @@ namespace LizardNight
                         sr.flipX = true;
                         break;
 
+
                 }
             }
 
@@ -167,25 +170,51 @@ namespace LizardNight
 
         }
 
+        private void OnTriggerExit2D(Collider2D collision)
+        {
+            if (!attributes.mobile)
+            {
+                triggered = false;
+            }
+        }
+
         public void Movement()
         {
-            //Don't do anything if disabled
-            if (!gameObject.GetComponent<BasicEnemy>().enabled)
+            if (attributes.mobile)
             {
-                return;
+
+                //Don't do anything if disabled
+                if (!gameObject.GetComponent<BasicEnemy>().enabled)
+                {
+                    return;
+                }
+
+                if (!triggered)
+                {
+                    Move();
+                }
+                //if triggered by player will pursue
+                else
+                {
+
+                    PathRequestManager.RequestPath(transform.position, target.transform.position, Pursue);
+
+                }
+
             }
 
-            if (!triggered)
-            {
-                Move();
-            }
-            //if triggered by player will pursue
             else
             {
+                if (triggered)
+                {
+                    target.GetComponent<PlayerScript>().takeDamage(physDamage.StatValue);
+                }
 
-                PathRequestManager.RequestPath(transform.position, target.transform.position, Pursue);
+            }
 
-
+            if (attributes.isBoss)
+            {
+                _stationary = true;
             }
 
         }
@@ -204,9 +233,12 @@ namespace LizardNight
                     transform.Translate(movementVector);
                     //Animation stuff
                     SpriteRenderer sr = GetComponent<SpriteRenderer>();
-                    if (movementVector.x < 0) {
+                    if (movementVector.x < 0)
+                    {
                         sr.flipX = true;
-                    }else {
+                    }
+                    else
+                    {
                         sr.flipX = false;
                     }
 
@@ -220,9 +252,12 @@ namespace LizardNight
                     //Animation
                     Vector3 movementVector = new Vector3(newPos.x - positionX, newPos.y - positionY);
                     SpriteRenderer sr = GetComponent<SpriteRenderer>();
-                    if (movementVector.x < 0) {
+                    if (movementVector.x < 0)
+                    {
                         sr.flipX = true;
-                    } else {
+                    }
+                    else
+                    {
                         sr.flipX = false;
                     }
 
@@ -234,7 +269,7 @@ namespace LizardNight
         }
         public void takeDamage(int damage)
         {
-          
+
             vitalHealth.StatCurrentValue -= damage;
             Debug.Log("Enemy Health is " + vitalHealth.StatCurrentValue);
 
@@ -271,7 +306,7 @@ namespace LizardNight
 
             gridHandler.setNode(positionX, positionY, true);
             gridHandler.setCharGrid(positionX, positionY, null);
-            
+
         }
     }
 

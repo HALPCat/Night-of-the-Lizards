@@ -99,6 +99,10 @@ namespace LizardNight
             {
                 if (!enemies[i].stationary)
                     enemies[i].Movement();
+                else
+                {
+                    enemies[i].stationary = false;
+                }
 
                 yield return null;
             }

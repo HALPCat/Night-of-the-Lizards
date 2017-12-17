@@ -18,6 +18,10 @@ namespace LizardNight
         [SerializeField]
         int Strenght = 1;
 
+        public bool mobile = true;
+        public bool isBoss = false;
+    
+
         protected override void ConfigureStats()
         {
             var constitution = CreateOrGetStat<Attribute>(StatType.Constitution);
@@ -36,7 +40,7 @@ namespace LizardNight
             physDamage.SetStat("Physical Damage", Damage);
             physDamage.AddLinker(new LinkerBasic(CreateOrGetStat<Attribute>(StatType.Strenght), 5));
             physDamage.UpdateLinkers();
-                              
+
         }
     }
 }
