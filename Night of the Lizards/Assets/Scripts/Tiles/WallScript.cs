@@ -18,7 +18,7 @@ namespace LizardNight {
             //Bedroom wall
             if (gridHandler.getFloorType().Equals("bedroom")) {
                 this.GetComponent<SpriteRenderer>().sprite = wallSprites[0];
-                topPiece = (GameObject)Instantiate(Resources.Load("WallTopPiece"), new Vector3(transform.position.x, transform.position.y + 1), Quaternion.identity);
+                topPiece = (GameObject)Instantiate(Resources.Load("WallTopPiece"), new Vector3(transform.position.x, transform.position.y +1), Quaternion.identity);
                 topPiece.transform.parent = this.transform;
             }
             //swamp wall
@@ -28,7 +28,7 @@ namespace LizardNight {
             //disco wall
             else {
                 this.GetComponent<SpriteRenderer>().sprite = wallSprites[2];
-                topPiece = (GameObject)Instantiate(Resources.Load("WallTopPiece"), new Vector3(transform.position.x, transform.position.y + 1), Quaternion.identity);
+                topPiece = (GameObject)Instantiate(Resources.Load("WallTopPiece"), new Vector3(transform.position.x, transform.position.y+1), Quaternion.identity);
                 topPiece.transform.parent = this.transform;
             }
         }

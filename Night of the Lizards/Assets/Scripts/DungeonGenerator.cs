@@ -431,7 +431,7 @@ namespace LizardNight
             //Tutorial floor
             if (levelName.Equals("tutorial")) {
                 FillGrid(grid, Resources.Load("Wall") as GameObject);
-                Vector2[] floorTiles = { new Vector2(14, 19), new Vector2(16, 19), new Vector2(18, 19), 
+                Vector2[] floorTiles = { new Vector2(14, 19), new Vector2(16, 19), new Vector2(18, 19),
                                          new Vector2(13, 18), new Vector2(14, 18), new Vector2(15, 18), new Vector2(16, 18), new Vector2(17, 18), new Vector2(18, 18), new Vector2(19, 18), new Vector2(20, 18),
                                          new Vector2(14, 17), new Vector2(20, 17),
                                          new Vector2(13, 16), new Vector2(14, 16), new Vector2(20, 16),
