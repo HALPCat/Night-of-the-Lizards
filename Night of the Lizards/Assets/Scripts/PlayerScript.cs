@@ -31,6 +31,7 @@ namespace LizardNight
 
         GameObject stairsDown;
         [SerializeField]
+        bool debugMode;
 
         protected override void Awake()
         {
@@ -178,12 +179,12 @@ namespace LizardNight
                         GameMaster.GM.playersTurn = false;
                     }
                 }
-
+                
                 //Using stairs
                 if (Input.GetButtonDown("Jump"))
                 {
                     stairsDown = GameObject.Find("StairsDown(Clone)");
-                    if (transform.position == stairsDown.transform.position)
+                    if (transform.position == stairsDown.transform.position || debugMode)
                     {
                         floor++;
                         gridHandler.NewFloor();

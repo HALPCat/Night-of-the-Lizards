@@ -52,11 +52,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9aa909f3f32938e41af317018b80d5c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  topPieces:
+  bedroomSprites:
   - {fileID: 21300004, guid: 4ff23af68bcc8914caace51efcfe57fb, type: 3}
   - {fileID: 21300006, guid: 4ff23af68bcc8914caace51efcfe57fb, type: 3}
+  swampSprites:
   - {fileID: 21300006, guid: ed980f28a6fb1924088cb95516ecf8ac, type: 3}
-  - {fileID: 21300006, guid: ed980f28a6fb1924088cb95516ecf8ac, type: 3}
+  discoSprites:
   - {fileID: 21300006, guid: 62ccf46958cc0474697717d4d1154438, type: 3}
   - {fileID: 21300008, guid: 62ccf46958cc0474697717d4d1154438, type: 3}
 --- !u!212 &212546500369732772
