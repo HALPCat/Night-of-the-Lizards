@@ -439,16 +439,6 @@ namespace LizardNight
                                          new Vector2(13, 14), new Vector2(14, 14), new Vector2(15, 14), new Vector2(16, 14), new Vector2(18, 14), new Vector2(19, 14), new Vector2(20, 14),
                                          new Vector2(14, 13), new Vector2(15, 13), new Vector2(16, 13), new Vector2(18, 13), new Vector2(19, 13), new Vector2(20, 13)
                                         };
-                /*
-                 * Vector2[] floorTiles = { new Vector2(14, 13), new Vector2(16, 13), new Vector2(18, 13), 
-                                         new Vector2(13, 14), new Vector2(14, 14), new Vector2(15, 14), new Vector2(16, 14), new Vector2(17, 14), new Vector2(18, 14), new Vector2(19, 14), new Vector2(20, 14),
-                                         new Vector2(14, 15), new Vector2(20, 15),
-                                         new Vector2(13, 16), new Vector2(14, 16), new Vector2(20, 16),
-                                         new Vector2(14, 17), new Vector2(20, 17),
-                                         new Vector2(13, 18), new Vector2(14, 18), new Vector2(15, 18), new Vector2(16, 18), new Vector2(18, 18), new Vector2(19, 18), new Vector2(20, 18),
-                                         new Vector2(14, 19), new Vector2(16, 19), new Vector2(18, 19), new Vector2(19, 19), new Vector2(20, 19)
-                                        };
-                */
 
                 //Place floors
                 for (int i = 0; i < floorTiles.Length; i++) {

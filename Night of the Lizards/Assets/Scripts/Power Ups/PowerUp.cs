@@ -26,6 +26,9 @@ namespace LizardNight
                 if (playSound) {
                     Instantiate(Resources.Load("PowerUpSoundPlayer"));
                 }
+                //Animation
+                PillEffectScript pes = GameObject.Find("Power Up FX").GetComponent<PillEffectScript>();
+                pes.PlayFX();
 
                 PowerUpPlayer(collision.gameObject);
                 Destroy(gameObject);
