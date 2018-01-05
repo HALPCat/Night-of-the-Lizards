@@ -14,7 +14,8 @@ namespace LizardNight
         public const string DiagonalDownAxis = "Diagonal Down";
         public const string Wait = "Wait";
 
-       
+        Animator anim;
+
         protected Attribute constitution, strenght, physDamage, armor;
         protected Vital vitalHealth;
 
@@ -44,6 +45,8 @@ namespace LizardNight
         // Use this for initialization
         protected virtual void Start()
         {
+            anim = GetComponent<Animator>();
+
             if (gridHandler == null)
             {
                 Debug.Log(this.name + " gridHandler is null, finding a GridHandler");
@@ -64,6 +67,8 @@ namespace LizardNight
 
         protected virtual void Awake()
         {
+            
+
             if (CharLevel == null)
             {
                 CharLevel = GetComponent<CharLevel>();
@@ -109,6 +114,9 @@ namespace LizardNight
 
         protected void moveVertical(int tiles)
         {
+            //Animation
+            anim.Play("Move", 0);
+
             updateLastPosition();
             transform.Translate(new Vector3(0, tiles));
             positionY = (int)transform.position.y;
@@ -124,6 +132,7 @@ namespace LizardNight
             } else {
                 sr.flipX = false;
             }
+            anim.Play("Move", 0);
 
             updateLastPosition();
             transform.Translate(new Vector3(tiles, 0));
@@ -142,6 +151,7 @@ namespace LizardNight
             } else {
                 sr.flipX = false;
             }
+            anim.Play("Move", 0);
 
             updateLastPosition();
             transform.Translate(new Vector3(tileX, tileY));

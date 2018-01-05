@@ -27,6 +27,8 @@ namespace LizardNight
         public GameObject deathCanvas;
         public bool paused;
 
+        Animator anim;
+
         List<Scores> highScores;
 
         GameObject stairsDown;
@@ -35,6 +37,7 @@ namespace LizardNight
 
         protected override void Awake()
         {
+            anim = GetComponent<Animator>();
             attributes = GetComponent<BaseClass>();
             initiateStats();
 
@@ -87,6 +90,7 @@ namespace LizardNight
                     if (!canMove(direction))
                         if (CanAttack(direction))
                         {
+                            
                             Attack(direction);
                         }
                     if (canMove(direction))
@@ -362,7 +366,7 @@ namespace LizardNight
 
         protected void Attack(int direction)
         {
-
+            anim.Play("PlayerAttack", 0);
 
 
             switch (direction)

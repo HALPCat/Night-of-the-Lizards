@@ -11,12 +11,20 @@ namespace LizardNight
         bool playSound = true;
 
         Rigidbody2D _rigidbody;
+        PillEffectScript pes;
 
         private void Awake()
         {
             _rigidbody = GetComponent<Rigidbody2D>();
         }
 
+        private void Start()
+        {
+            pes = GameObject.Find("Power Up FX").GetComponent<PillEffectScript>();
+            if (pes == null) {
+                Debug.Log("REEE pill couldn't find Power Up FX or get PillEffectScript");
+            }
+        }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
@@ -27,7 +35,6 @@ namespace LizardNight
                     Instantiate(Resources.Load("PowerUpSoundPlayer"));
                 }
                 //Animation
-                PillEffectScript pes = GameObject.Find("Power Up FX").GetComponent<PillEffectScript>();
                 pes.PlayFX();
 
                 PowerUpPlayer(collision.gameObject);

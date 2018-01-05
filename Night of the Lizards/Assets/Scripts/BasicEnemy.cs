@@ -32,6 +32,8 @@ namespace LizardNight
         Vector3 path;
         int targetIndex;
 
+        //animator
+        Animator anim;
 
         [SerializeField]
         protected bool _stationary;
@@ -45,6 +47,7 @@ namespace LizardNight
         protected override void Awake()
         {
             attributes = GetComponent<EnemyOne>();
+            anim = GetComponent<Animator>();
 
             //base.Awake();
         }
@@ -241,6 +244,7 @@ namespace LizardNight
                     {
                         sr.flipX = false;
                     }
+                    anim.Play("Move", 0);
 
                     //Debug.Log("New Position is: " + newPos);
                     positionX = (int)transform.position.x;
@@ -250,6 +254,8 @@ namespace LizardNight
                 else
                 {
                     //Animation
+                    anim.Play("Enemy Attack", 0);
+
                     Vector3 movementVector = new Vector3(newPos.x - positionX, newPos.y - positionY);
                     SpriteRenderer sr = GetComponent<SpriteRenderer>();
                     if (movementVector.x < 0)
