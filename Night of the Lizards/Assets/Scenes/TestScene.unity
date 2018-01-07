@@ -2025,6 +2025,11 @@ Prefab:
       propertyPath: gridHandler
       value: 
       objectReference: {fileID: 1969715890}
+    - target: {fileID: 82431171531955210, guid: 404c8393eb0136d40bed1e8964c9c56e,
+        type: 2}
+      propertyPath: m_audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 61dc6cc6a4f1a0749a9cba029f7d7e0d, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 404c8393eb0136d40bed1e8964c9c56e, type: 2}
   m_IsPrefabParent: 0

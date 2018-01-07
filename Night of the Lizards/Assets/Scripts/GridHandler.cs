@@ -172,6 +172,7 @@ namespace LizardNight
 
         public void LoadStage(string stageName)
         {
+            musicController.ChangeSong();
             dungeonGenerator.DestroyEnemies();
             dungeonGenerator.DestroyPowerUps();
             dungeonGenerator.DestroyDungeon(tileGrid);
