@@ -11,7 +11,8 @@ namespace LizardNight
 
         [SerializeField]
         public int tunnelLength = 20;
-
+        [SerializeField]
+        GridHandler gridhandler;
 
         List<Vector2> freeFloorPositions = new List<Vector2>();
         Vector2[] potentialFloorPositions = new Vector2[16 * 16];
@@ -23,12 +24,9 @@ namespace LizardNight
 
             freeFloorPositions.Clear();
 
-            for (int i = 0; i < dungeonWidth; i++)
-            {
-                for (int j = 0; j < dungeonHeight; j++)
-                {
-                    if (grid[i, j] == Resources.Load("Floor"))
-                    {
+            for (int i = 0; i < dungeonWidth; i++) {
+                for (int j = 0; j < dungeonHeight; j++) {
+                    if (grid[i, j] == Resources.Load("Floor")) {
                         freeFloorPositions.Add(new Vector2(i, j));
                     }
                 }
@@ -39,10 +37,8 @@ namespace LizardNight
         {
             int dungeonWidth = grid.GetLength(0);
             int dungeonHeight = grid.GetLength(1);
-            for (int i = 0; i < dungeonWidth; i++)
-            {
-                for (int j = 0; j < dungeonHeight; j++)
-                {
+            for (int i = 0; i < dungeonWidth; i++) {
+                for (int j = 0; j < dungeonHeight; j++) {
                     //Create a tile in the grid in corresponding coordinates
                     grid[i, j] = Instantiate(grid[i, j], new Vector3(transform.position.x + i, transform.position.y + j), Quaternion.identity);
                 }
@@ -54,10 +50,8 @@ namespace LizardNight
             int dungeonWidth = grid.GetLength(0);
             int dungeonHeight = grid.GetLength(1);
             GameObject currentTile;
-            for (int i = 0; i < dungeonWidth; i++)
-            {
-                for (int j = 0; j < dungeonHeight; j++)
-                {
+            for (int i = 0; i < dungeonWidth; i++) {
+                for (int j = 0; j < dungeonHeight; j++) {
                     currentTile = grid[i, j];
                     //Destroy(currentTile);
                     Destroy(grid[i, j]);
@@ -70,10 +64,8 @@ namespace LizardNight
             int dungeonWidth = grid.GetLength(0);
             int dungeonHeight = grid.GetLength(1);
 
-            for (int i = 0; i < dungeonWidth; i++)
-            {
-                for (int j = 0; j < dungeonHeight; j++)
-                {
+            for (int i = 0; i < dungeonWidth; i++) {
+                for (int j = 0; j < dungeonHeight; j++) {
                     grid[i, j] = tileType;
                 }
             }
@@ -96,60 +88,44 @@ namespace LizardNight
             grid[middleX, middleY] = Resources.Load("Floor") as GameObject;
 
             //Loop as long as tunnel length is achieved
-            for (int i = 0; i < tunnelLength; i++)
-            {
+            for (int i = 0; i < tunnelLength; i++) {
                 //validMove is false as long as tunneler lands on floor, turns true when landing on wall
                 bool validMove = false;
                 //Attempts increase when more valid moves are made
                 int attempts = 0;
 
-                while (!validMove)
-                {
+                while (!validMove) {
                     //Generate a random direction to go to
                     //0 = up, 1 = right, 2 = down, 3 = left
                     int randDirection = (int)(Random.value * 4);
 
-                    if (randDirection == 0)
-                    {
+                    if (randDirection == 0) {
                         currentY++;
-                        if (currentY == dungeonHeight - 1)
-                        {
+                        if (currentY == dungeonHeight - 1) {
                             currentY--;
                         }
-                    }
-                    else if (randDirection == 1)
-                    {
+                    } else if (randDirection == 1) {
                         currentX++;
-                        if (currentX == dungeonWidth - 1)
-                        {
+                        if (currentX == dungeonWidth - 1) {
                             currentX--;
                         }
-                    }
-                    else if (randDirection == 2)
-                    {
+                    } else if (randDirection == 2) {
                         currentY--;
-                        if (currentY == 0)
-                        {
+                        if (currentY == 0) {
                             currentY++;
                         }
-                    }
-                    else if (randDirection == 3)
-                    {
+                    } else if (randDirection == 3) {
                         currentX--;
-                        if (currentX == 0)
-                        {
+                        if (currentX == 0) {
                             currentX++;
                         }
                     }
 
                     //If landed tile was a wall, it was a valid move. Reset attempts
-                    if (grid[currentX, currentY] == Resources.Load("Wall"))
-                    {
+                    if (grid[currentX, currentY] == Resources.Load("Wall")) {
                         validMove = true;
                         attempts = 0;
-                    }
-                    else
-                    {
+                    } else {
                         //Else increase attempts
                         //Optimally this should reset curent position to a wall that can be tunneled into.
 
@@ -157,8 +133,7 @@ namespace LizardNight
                     }
 
                     //Exit loop if failed attempts are greater than given tunnel length times ten
-                    if (attempts > tunnelLength * 10)
-                    {
+                    if (attempts > tunnelLength * 10) {
                         Debug.LogError("Stopped generation after " + tunnelLength * 10 + " failed attempts.");
                         validMove = true;
                         i = tunnelLength;
@@ -283,40 +258,30 @@ namespace LizardNight
             bool cornersExist = true;
             int loops = 0;
 
-            while (cornersExist)
-            {
+            while (cornersExist) {
                 int corners = 0; //Amount of found corners
 
-                for (int i = 1; i < dungeonWidth - 1; i++)
-                {
-                    for (int j = 1; j < dungeonHeight - 1; j++)
-                    {
+                for (int i = 1; i < dungeonWidth - 1; i++) {
+                    for (int j = 1; j < dungeonHeight - 1; j++) {
                         //Check surroundings
-                        if (grid[i, j] == (GameObject)Resources.Load("Wall"))
-                        {
+                        if (grid[i, j] == (GameObject)Resources.Load("Wall")) {
                             sWest = true;
                         }
-                        if (grid[i + 1, j] == (GameObject)Resources.Load("Wall"))
-                        {
+                        if (grid[i + 1, j] == (GameObject)Resources.Load("Wall")) {
                             sEast = true;
                         }
-                        if (grid[i, j + 1] == (GameObject)Resources.Load("Wall"))
-                        {
+                        if (grid[i, j + 1] == (GameObject)Resources.Load("Wall")) {
                             nWest = true;
                         }
-                        if (grid[i + 1, j + 1] == (GameObject)Resources.Load("Wall"))
-                        {
+                        if (grid[i + 1, j + 1] == (GameObject)Resources.Load("Wall")) {
                             nEast = true;
                         }
 
-                        if (nEast && sWest && !nWest && !sEast)
-                        {
+                        if (nEast && sWest && !nWest && !sEast) {
                             Debug.Log("Case found at " + i + "," + j + "!");
                             grid[i, j] = Resources.Load("Floor") as GameObject;
                             corners++;
-                        }
-                        else if (nWest && sEast && !nEast && !sWest)
-                        {
+                        } else if (nWest && sEast && !nEast && !sWest) {
                             Debug.Log("Case found at " + i + "," + j + "!");
                             grid[i + 1, j] = Resources.Load("Floor") as GameObject;
                             corners++;
@@ -330,8 +295,7 @@ namespace LizardNight
                 }
 
                 loops++;
-                if (corners == 0)
-                {
+                if (corners == 0) {
                     cornersExist = false;
                 }
             }
@@ -349,25 +313,21 @@ namespace LizardNight
             bool downStairPlaced = false;
             bool upStairPlaced = false;
 
-            while (!downStairPlaced)
-            {
+            while (!downStairPlaced) {
                 randX = Random.Range(0, dungeonWidth);
                 randY = Random.Range(0, dungeonHeight);
 
-                if (grid[randX, randY] == Resources.Load("Floor"))
-                {
+                if (grid[randX, randY] == Resources.Load("Floor")) {
                     grid[randX, randY] = Resources.Load("StairsDown") as GameObject;
                     downStairPlaced = true;
                 }
             }
 
-            while (!upStairPlaced)
-            {
+            while (!upStairPlaced) {
                 randX = Random.Range(0, dungeonWidth);
                 randY = Random.Range(0, dungeonHeight);
 
-                if (grid[randX, randY] == Resources.Load("Floor"))
-                {
+                if (grid[randX, randY] == Resources.Load("Floor")) {
                     grid[randX, randY] = Resources.Load("StairsUp") as GameObject;
                     upStairPlaced = true;
                 }
@@ -381,8 +341,7 @@ namespace LizardNight
 
             BasicEnemy enemySheet = enemy.GetComponent<BasicEnemy>();
 
-            if (enemySheet != null)
-            {
+            if (enemySheet != null) {
                 enemySheet.InitializeAttributes(level);
             }
         }
@@ -391,11 +350,10 @@ namespace LizardNight
         {
             SpawnEnemies(grid, enemyPrefab, amount, 1);
         }
-        
+
         public void SpawnEnemies(GameObject[,] grid, GameObject enemyPrefab, int amount, int level)
         {
-            for (int i = 0; i < amount; i++)
-            {
+            for (int i = 0; i < amount; i++) {
                 int rand = Random.Range(0, freeFloorPositions.Count);
                 SpawnEnemy(grid, enemyPrefab, freeFloorPositions[rand], level);
                 freeFloorPositions.RemoveAt(rand);
@@ -404,24 +362,21 @@ namespace LizardNight
 
         public void DestroyEnemies()
         {
-            foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("enemy"))
-            {
+            foreach (GameObject enemy in GameObject.FindGameObjectsWithTag("enemy")) {
                 Destroy(enemy);
             }
         }
 
         public void DestroyPowerUps()
         {
-            foreach(GameObject powerUp in GameObject.FindGameObjectsWithTag("power up"))
-            {
+            foreach (GameObject powerUp in GameObject.FindGameObjectsWithTag("power up")) {
                 Destroy(powerUp);
             }
         }
 
         public void FloorCountDebugger()
         {
-            for (int i = 0; i < freeFloorPositions.Count; i++)
-            {
+            for (int i = 0; i < freeFloorPositions.Count; i++) {
                 Debug.Log("freeFloorPositions[" + i + "] = " + freeFloorPositions[i]);
             }
         }
@@ -456,13 +411,17 @@ namespace LizardNight
             //Boss floor
             else if (levelName.Equals("boss")) {
                 FillGrid(grid, Resources.Load("Wall") as GameObject);
-                Vector2[] floorTiles = { new Vector2(14, 19), new Vector2(16, 19), new Vector2(18, 19),
-                                         new Vector2(13, 18), new Vector2(14, 18), new Vector2(15, 18), new Vector2(16, 18), new Vector2(17, 18), new Vector2(18, 18), new Vector2(19, 18), new Vector2(20, 18),
-                                         new Vector2(14, 17), new Vector2(20, 17),
-                                         new Vector2(13, 16), new Vector2(14, 16), new Vector2(20, 16),
-                                         new Vector2(14, 15), new Vector2(20, 15),
-                                         new Vector2(13, 14), new Vector2(14, 14), new Vector2(15, 14), new Vector2(16, 14), new Vector2(18, 14), new Vector2(19, 14), new Vector2(20, 14),
-                                         new Vector2(14, 13), new Vector2(15, 13), new Vector2(16, 13), new Vector2(18, 13), new Vector2(19, 13), new Vector2(20, 13)
+                Vector2[] floorTiles = { new Vector2(14, 19),
+                                         new Vector2(14, 18),
+                                         new Vector2(12, 17), new Vector2(13, 17), new Vector2(14, 17),
+                                         new Vector2(14, 16),
+                                         new Vector2(12, 15), new Vector2(13, 15), new Vector2(14, 15), new Vector2(15, 15), new Vector2(16, 15),
+                                         new Vector2(12, 14), new Vector2(13, 14), new Vector2(14, 14), new Vector2(15, 14), new Vector2(16, 14),
+                                         new Vector2(12, 13), new Vector2(13, 13), new Vector2(14, 13), new Vector2(15, 13), new Vector2(16, 13),
+                                         new Vector2(12, 12), new Vector2(13, 12), new Vector2(14, 12), new Vector2(15, 12), new Vector2(16, 12),
+                                         new Vector2(12, 11), new Vector2(13, 11), new Vector2(14, 11), new Vector2(15, 11), new Vector2(16, 11),
+                                         new Vector2(13, 10), new Vector2(14, 10), new Vector2(15,10),
+                                         new Vector2(13, 9), new Vector2(14, 9), new Vector2(15,9)
                                         };
                 //Place floors
                 for (int i = 0; i < floorTiles.Length; i++) {
@@ -470,11 +429,15 @@ namespace LizardNight
                 }
 
                 //Stairs
-                grid[15, 14] = Resources.Load("StairsUp") as GameObject;
-                grid[18, 13] = Resources.Load("StairsDown") as GameObject;
+                grid[14, 12] = Resources.Load("StairsUp") as GameObject;
+                grid[14, 19] = Resources.Load("StairsDown") as GameObject;
 
                 //Enemies
-                SpawnEnemy(grid, Resources.Load("Enemy") as GameObject, new Vector2(20, 14), -1);
+                if(gridhandler.getDungeonFloor() < 6) {
+                    SpawnEnemy(grid, Resources.Load("BedroomBoss") as GameObject, new Vector2(14, 16), 1);
+                } else {
+                    SpawnEnemy(grid, Resources.Load("DiscoBoss") as GameObject, new Vector2(14, 16), 5);
+                }
             }
 
             //No floor
@@ -482,24 +445,5 @@ namespace LizardNight
                 Debug.Log("No level named \"" + levelName + "\" exists!");
             }
         }
-
-        /* obsolete trash from GridHandler, look into this later
-        void fillGrid() {
-            //For every slot in width
-            for (int i = 0; i < dungeonWidth; i++) {
-                //For every slot in height
-                for (int j = 0; j < dungeonHeight; j++) {
-                    //If current tile is a border tile
-                    if (i == 0 || j == 0 || i == dungeonWidth - 1 || j == dungeonHeight - 1) {
-                        //Occupy this grid slot with a wall
-                        grid[i, j] = Resources.Load("Wall") as GameObject;
-                    } else {
-                        //Occupy this grid slot with a floor
-                        grid[i, j] = Resources.Load("Floor") as GameObject;
-                    }
-                }
-            }
-        }
-        */
-            }
-        }
+    }
+}
